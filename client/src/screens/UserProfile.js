@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { UPDATE_FOLLOW_DATA } from "../contexts/types";
-import { config as axiosConfig } from "../config/constants";
+import { axiosConfig } from "../config/constants";
 // Material-UI Components
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
@@ -57,7 +57,7 @@ const UserProfilePage = () => {
 	const [data, setData] = useState(null);
 	const [showFollow, setShowFollow] = useState(state ? !state.Following.includes(userid) : null);
 
-	const config = axiosConfig(localStorage.getItem("jwt"));
+	const config = axiosConfig();
 
 	useEffect(() => {
 		axios.get(`http://localhost:5000/user/${userid}`, config).then((res) => {

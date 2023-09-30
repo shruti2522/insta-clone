@@ -31,7 +31,7 @@ export const logIn = createAsyncThunk(process.env.REACT_APP_BACKEND_URL + "/auth
     Cookies.set('authToken', token, { expires: 7 }); 
 
     console.log(responseData.message);
-
+    console.log(responseData)
     return responseData;
   } catch (error) {
     console.error("Error during sign up:", error);

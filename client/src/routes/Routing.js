@@ -25,9 +25,9 @@ const Routing = () => {
     const token = Cookies.get('authToken')
 
     if (token) {
-      dispatch({ type: "FETCH_USER_DATA" }); // You should have a LOGIN action in your context
+      dispatch({ type: "FETCH_USER_DATA" }); 
     } else {
-      dispatch({ type: "LOGOUT" }); // You should have a LOGOUT action in your context
+      dispatch({ type: "LOGOUT" }); 
     }
   }, [dispatch]);
 

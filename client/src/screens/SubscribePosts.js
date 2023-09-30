@@ -9,7 +9,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AuthenticationContext from "../contexts/auth/Auth.context";
-import { config as axiosConfig, SUB_POST_URL } from "../config/constants";
+import { axiosConfig, SUB_POST_URL } from "../config/constants";
 // Material-UI Components
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -122,11 +122,14 @@ const SubscribePost = () => {
 	const [data, setData] = useState([]);
 	const [showSend, setShowSend] = useState(false);
 	const [comment, setComment] = useState("");
-
-	const config = axiosConfig(localStorage.getItem("jwt"));
-
+    
+	const config = axiosConfig();
+	console.log(config)
+    
 	useEffect(() => {
+		console.log("subscribe bro")
 		axios.get(SUB_POST_URL, config).then((res) => {
+			console.log("subscribe to posts")
 			setData(res.data.posts);
 		});
 	}, []);

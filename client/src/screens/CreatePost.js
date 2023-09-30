@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Axios from "axios";
-import { config as axiosConfig, CREATE_POST_URL } from "../config/constants";
+import { axiosConfig, CREATE_POST_URL } from "../config/constants";
 import Navbar from "../components/Navbar";
 
 // Material-UI deps
@@ -104,7 +104,7 @@ const CreatePoste = () => {
 	const [query, setQuery] = useState("idle");
 	const timerRef = useRef();
 
-	const config = axiosConfig(localStorage.getItem("jwt"));
+	const config = axiosConfig();
 
 	useEffect(
 		() => () => {

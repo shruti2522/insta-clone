@@ -11,7 +11,7 @@ import axios from "axios";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import VerticalTabs from "../components/VerticalTabs.js";
 import Navbar from "../components/Navbar";
-import { config as axiosConfig, MY_POST_URL, MY_BOOKMARKS_URL } from "../config/constants";
+import { axiosConfig, MY_POST_URL, MY_BOOKMARKS_URL } from "../config/constants";
 
 // Material-UI Components
 import { makeStyles, withStyles } from "@material-ui/styles";
@@ -111,7 +111,7 @@ const ProfilePage = () => {
 	const [bookmarks, setBookmarks] = useState([]);
 	const [value, setValue] = useState("Posts");
 
-	const config = axiosConfig(localStorage.getItem("jwt"));
+	const config = axiosConfig();
 
 	useEffect(() => {
 		axios.get(MY_POST_URL, config).then((res) => {
@@ -151,7 +151,7 @@ const ProfilePage = () => {
 							<Box clone mb="20px">
 								<Grid container alignItems="center">
 									<Typography variant="h5">
-										{state ? state.user.Name : "IsLoading ..."}
+										{state ? state.user.username : "IsLoading ..."}
 									</Typography>
 									<Button
 										className={classes.editButton}
@@ -250,7 +250,7 @@ const ProfilePage = () => {
 								/>
 								<GridListTileBar
 									title={item.Title}
-									subtitle={<span>By : {item.PostedBy.Name}</span>}
+									subtitle={<span>By : {item.PostedBy.username}</span>}
 									actionIcon={
 										<IconButton
 											aria-label={`info about`}

@@ -11,7 +11,7 @@ import axios from "axios";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { BOOKMARK_POST } from "../contexts/types.js";
 import Navbar from "../components/Navbar";
-import { config as axiosConfig, ALL_POST_URL } from "../config/constants";
+import { axiosConfig, ALL_POST_URL } from "../config/constants";
 // Material-UI Components
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -128,10 +128,8 @@ const Home = () => {
 	const [showSend, setShowSend] = useState(false);
 	const [comment, setComment] = useState("");
 
-	const token = Cookies.get("authToken");
-
   // Modify your axios configuration to include the token
-    const config = axiosConfig(token);
+    const config = axiosConfig();
 
 	const likePost = (id) => {
 		axios.put(`http://localhost:5000/like`, { postId: id }, config)

@@ -12,13 +12,17 @@
 
 // This is the config used in order to send
 // our token with Axios requests
-export const config = (jwt) => {
-	return {
-		headers: {
-			Authorization: "Bearer " + jwt,
-		},
-	};
+import Cookies from "js-cookie";
+
+export const axiosConfig = () => {
+  const token = Cookies.get('authToken'); 
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 };
+
 
 /**
  * EndPoints of the API used in the code
