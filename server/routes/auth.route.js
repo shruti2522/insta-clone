@@ -3,10 +3,10 @@ const controller = require("../controllers/auth.controller");
 
 module.exports = (app) => {
 	// Route to handle SignUp requests
-	app.post("/auth/signup", controller.signup);
+	app.post("/signup", controller.signup);
 
 	// Route to handle SignIn requests
-	app.post("/auth/login", controller.signin);
+	app.post("/signin", controller.signin);
 
 	// Route to handle Reset Passwords requests
 	app.post("/reset-pwd", controller.resetPwd);

@@ -85,11 +85,7 @@ exports.signin = (req, res) => {
 						success: true,
 						message: "Login successful.",
 						data: {
-							_id,
-							firstname: firstname,
-							lastname: lastname,
-							username: username,
-							email: email,
+							user: savedUser,
 							token: token
 						},
 						

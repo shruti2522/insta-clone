@@ -2,8 +2,8 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
-// import { FETCH_USER_DATA } from "../contexts/types.js";
-// import { LOGIN_URL } from "../config/constants";
+import { FETCH_USER_DATA } from "../contexts/types.js";
+import { LOGIN_URL } from "../config/constants";
 import Copyright from "../components/Copyight";
 import { EmailRegex } from "../utils/regex";
 import axios from "axios";
@@ -17,9 +17,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Alert from "@material-ui/lab/Alert";
-import { logIn } from "../slice/loginSlice";
 import { useDispatch } from 'react-redux';
-
+import Cookies from "js-cookie";
 
 // General Styles
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const dispatchUser = useDispatch();
 
   const history = useHistory();
   const classes = useStyles();
@@ -59,6 +58,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [formatValidation, setFormatValidation] = useState(false);
   const [authValidation, setAuthValidation] = useState(false); 
+  const { dispatch } = useContext(AuthenticationContext);
 
   const handleInputChanges = (e) => {
 	const { name, value } = e.target;
@@ -70,16 +70,44 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-	if (!EmailRegex.test(email)) {
-		setFormatValidation(true);
-		return;
+	if (EmailRegex.test(email)) {
+		try {
+		const response = await fetch(LOGIN_URL, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			email,
+			password
+		}),
+		});
+
+		if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(errorData.message);
 		}
-        try {
-			console.log("button clicked")
-			dispatch(logIn({ email, password }))
-			history.push('/');
-		} catch (error) {
-		setAuthValidation(true);
+
+		const responseData = await response.json();
+		const token = responseData.data.token; 
+		
+		Cookies.set('authToken', token, { expires: 7 }); 
+		dispatch({ type: FETCH_USER_DATA, payload: responseData.data.user });
+		history.push("/");
+
+		console.log(responseData.message);
+		console.log(responseData)
+		return responseData;
+	} catch (error) {
+		console.error("Error during sign up:", error);
+		if (error.response) {
+		console.error("Response status:", error.response.status);
+		console.error("Response data:", error.response.data);
+		}
+		throw error;}
+		} else {
+			setAuthValidation(false);
+			setFormatValidation(true);
 		}
   }
 

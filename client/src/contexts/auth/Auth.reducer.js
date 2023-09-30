@@ -14,13 +14,13 @@ export default (state, action) => {
 		case UPDATE_FOLLOW_DATA:
 			return {
 				...state,
-				Followers: payload.Followers,
-				Following: payload.Following,
+				followers: payload.followers,
+				following: payload.following,
 			};
 		case BOOKMARK_POST:
 			return {
 				...state,
-				Bookmarks: payload.Bookmarks,
+				bookmarks: payload.bookmarks,
 			};
 		case LOGOUT:
 			return { isAuthenticated: true };
