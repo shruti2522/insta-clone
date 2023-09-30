@@ -1,5 +1,6 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {SIGNUP_URL} from '../config/constants';
 
 const initialState = {
   user: null,
@@ -7,9 +8,9 @@ const initialState = {
   loading: false,
 };
 
-export const signUp = createAsyncThunk(process.env.REACT_APP_BACKEND_URL + "/auth/signup", async ({firstname,lastname,username,email,password}) => {
+export const signUp = createAsyncThunk(SIGNUP_URL, async ({firstname,lastname,username,email,password}) => {
   try {
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/auth/signup", {
+    const response = await fetch(SIGNUP_URL + "/signup", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
