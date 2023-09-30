@@ -41,6 +41,7 @@ exports.signup = (req, res) => {
 						// 	html: "<h1>Welcome to InstaClone</h1>",
 						// };
 						// sgMail.send(email);
+						console.log(user)
 						return res.json({
 							success: true,
 							message: "Signup successful.Please check your mail to verify your account.",
