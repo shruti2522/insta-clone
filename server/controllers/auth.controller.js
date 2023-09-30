@@ -113,14 +113,14 @@ exports.resetPwd = (req, res) => {
 			console.log(err);
 		}
 		const token = buffer.toString("hex");
-		User.findOne({ Email: req.body.email }).then((user) => {
+		User.findOne({ email: req.body.email }).then((user) => {
 			if (!user) {
 				console.log("simple check of the error source");
 				return res.json({ error: "No User exists with that email" });
 			}
 
-			user.ResetToken = token;
-			user.ExpirationToken = Date.now() + 600000; // 10min in ms
+			user.resetToken = token;
+			user.expirationToken = Date.now() + 600000; // 10min in ms
 			user.save().then((result) => {
 				// this section will be fully functional after adding the SendGrid API Key
 				// in order to use this feature
@@ -149,17 +149,17 @@ exports.resetPwd = (req, res) => {
 
 // New Password Controller
 exports.newPwd = (req, res) => {
-	const Password = req.body.password;
-	const Token = req.body.token;
-	User.findOne({ ResetToken: Token, ExpirationToken: { $gt: Date.now() } })
+	const password = req.body.password;
+	const token = req.body.token;
+	User.findOne({ resetToken: token, expirationToken: { $gt: Date.now() } })
 		.then((user) => {
 			if (!user) {
 				return res.status(422).json({ error: "Session expired ! Try Again with a new Request" });
 			}
-			bcrypt.hash(Password, 12).then((HashPwd) => {
+			bcrypt.hash(password, 12).then((HashPwd) => {
 				user.password = HashPwd;
-				user.ResetToken = undefined;
-				user.ExpirationToken = undefined;
+				user.resetToken = undefined;
+				user.expirationToken = undefined;
 				user.save().then((result) => {
 					res.json({ message: "Password Updated successfully" });
 				});

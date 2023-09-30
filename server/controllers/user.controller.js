@@ -7,22 +7,22 @@ exports.user = (req, res) => {
 		.select("-password")
 		.then((user) => {
 			console.log("user route")
-			Post.find({ PostedBy: req.params.id })
-				.populate("PostedBy", "_id username")
+			Post.find({ postedBy: req.params.id })
+				.populate("postedBy", "_id username")
 				.exec((err, result) => {
 					if (err) return res.status(422).json();
 					const posts = [];
 					result.map((item) => {
 						posts.push({
 							_id: item._id,
-							Title: item.Title,
-							Body: item.Body,
-							Photo: item.Photo.toString("base64"),
-							PhotoType: item.PhotoType,
-							Likes: item.Likes,
-							Comments: item.Comments,
-							Followers: item.Followers,
-							Following: item.Following,
+							title: item.title,
+							body: item.body,
+							photo: item.photo.toString("base64"),
+							photoType: item.photoType,
+							likes: item.likes,
+							comments: item.comments,
+							followers: item.followers,
+							following: item.following,
 						});
 					});
 					res.json({ user, posts });
@@ -37,7 +37,7 @@ exports.follow = (req, res) => {
 	User.findByIdAndUpdate(
 		req.body.followId,
 		{
-			$push: { Followers: req.user._id },
+			$push: { followers: req.user._id },
 		},
 		{
 			new: true,
@@ -50,7 +50,7 @@ exports.follow = (req, res) => {
 			User.findByIdAndUpdate(
 				req.user._id,
 				{
-					$push: { Following: req.body.followId },
+					$push: { following: req.body.followId },
 				},
 				{ new: true }
 			)
@@ -69,7 +69,7 @@ exports.unfollow = (req, res) => {
 	User.findByIdAndUpdate(
 		req.body.unfollowId,
 		{
-			$pull: { Followers: req.user._id },
+			$pull: { followers: req.user._id },
 		},
 		{
 			new: true,
@@ -81,7 +81,7 @@ exports.unfollow = (req, res) => {
 			User.findByIdAndUpdate(
 				req.user._id,
 				{
-					$pull: { Following: req.body.unfollowId },
+					$pull: { following: req.body.unfollowId },
 				},
 				{ new: true }
 			)
@@ -100,21 +100,21 @@ exports.bookmarks = (req, res) => {
 	User.find({ _id: req.user._id })
 		.select("-password")
 		.then((user) => {
-			const data = user[0].Bookmarks;
+			const data = user[0].bookmarks;
 			Post.find({ _id: { $in: data } })
-				.populate("PostedBy", "_id username")
+				.populate("postedBy", "_id username")
 				.then((result) => {
 					let bookmark = [];
 					result.map((item) => {
 						bookmark.push({
 							_id: item._id,
-							PostedBy: item.PostedBy,
-							Title: item.Title,
-							Body: item.Body,
-							Photo: item.Photo.toString("base64"),
-							PhotoType: item.PhotoType,
-							Likes: item.Likes,
-							Comments: item.Comments,
+							postedBy: item.postedBy,
+							title: item.title,
+							body: item.body,
+							photo: item.photo.toString("base64"),
+							photoType: item.photoType,
+							likes: item.likes,
+							comments: item.comments,
 						});
 					});
 					res.json({ bookmark });
@@ -130,7 +130,7 @@ exports.bookmarkPost = (req, res) => {
 	User.findByIdAndUpdate(
 		req.user._id,
 		{
-			$push: { Bookmarks: req.body.postId },
+			$push: { bookmarks: req.body.postId },
 		},
 		{ new: true }
 	)
@@ -147,7 +147,7 @@ exports.removeBookmark = (req, res) => {
 	User.findByIdAndUpdate(
 		req.user._id,
 		{
-			$pull: { Bookmarks: req.body.postId },
+			$pull: { bookmarks: req.body.postId },
 		},
 		{ new: true }
 	)
@@ -164,7 +164,7 @@ exports.removeBookmark = (req, res) => {
 exports.updatePicture = (req, res) => {
 	User.findByIdAndUpdate(
 		req.user._id,
-		{ $set: { Photo: req.body.Photo, PhotoType: req.body.PhotoType } },
+		{ $set: { photo: req.body.photo, photoType: req.body.photoType } },
 		{ new: true },
 		(err, result) => {
 			if (err) {
@@ -177,7 +177,7 @@ exports.updatePicture = (req, res) => {
 
 exports.userSearch = (req, res) => {
 	let pattern = new RegExp("^" + req.body.pattern);
-	User.find({ Email: { $regex: pattern } })
+	User.find({ email: { $regex: pattern } })
 		.select("_id email username")
 		.then((user) => {
 			res.json({ user });

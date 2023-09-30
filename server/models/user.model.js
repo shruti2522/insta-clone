@@ -23,17 +23,17 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	ResetToken: { type: String },
-	ExpirationToken: { type: Date },
-	Photo: {
+	resetToken: { type: String },
+	expirationToken: { type: Date },
+	photo: {
 		type: Buffer,
 	},
-	PhotoType: {
+	photoType: {
 		type: String,
 	},
-	Followers: [{ type: ObjectId, ref: "User" }],
-	Following: [{ type: ObjectId, ref: "User" }],
-	Bookmarks: [{ type: ObjectId, ref: "Post" }],
+	followers: [{ type: ObjectId, ref: "User" }],
+	following: [{ type: ObjectId, ref: "User" }],
+	bookmarks: [{ type: ObjectId, ref: "Post" }],
 });
 
 

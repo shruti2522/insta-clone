@@ -178,7 +178,7 @@ const ProfilePage = () => {
 										<Typography variant="subtitle1">
 											<b>
 												{state
-													? state.user.Followers.length
+													? state.user.followers.length
 													: "IsLoading ..."}
 											</b>{" "}
 											followers
@@ -188,7 +188,7 @@ const ProfilePage = () => {
 										<Typography variant="subtitle1">
 											<b>
 												{state
-													? state.user.Following.length
+													? state.user.following.length
 													: "IsLoading ..."}
 											</b>{" "}
 											following
@@ -245,12 +245,12 @@ const ProfilePage = () => {
 						{bookmarks.map((item) => (
 							<GridListTile key={item._id}>
 								<img
-									src={`data:${item.PhotoType};base64,${item.Photo}`}
-									alt={item.Title}
+									src={`data:${item.photoType};base64,${item.photo}`}
+									alt={item.title}
 								/>
 								<GridListTileBar
-									title={item.Title}
-									subtitle={<span>By : {item.PostedBy.username}</span>}
+									title={item.title}
+									subtitle={<span>By : {item.postedBy.username}</span>}
 									actionIcon={
 										<IconButton
 											aria-label={`info about`}

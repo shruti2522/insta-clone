@@ -127,7 +127,6 @@ const SubscribePost = () => {
 	console.log(config)
     
 	useEffect(() => {
-		console.log("subscribe bro")
 		axios.get(SUB_POST_URL, config).then((res) => {
 			console.log("subscribe to posts")
 			setData(res.data.posts);
@@ -193,7 +192,7 @@ const SubscribePost = () => {
 									<img
 										className={classes.avatar}
 										alt=""
-										src={`data:${item.PhotoType};base64,${item.Photo}`}
+										src={`data:${item.photoType};base64,${item.photo}`}
 									/>
 								</Avatar>
 							}
@@ -201,12 +200,12 @@ const SubscribePost = () => {
 								<Link
 									className={classes.links}
 									to={
-										item.PostedBy._id !== state._id
-											? `/profile/${item.PostedBy._id}`
+										item.postedBy._id !== state._id
+											? `/profile/${item.postedBy._id}`
 											: "/profile"
 									}
 								>
-									{item.PostedBy.Name}
+									{item.postedBy.Name}
 								</Link>
 							}
 							subheader="September 14, 2016"
@@ -214,7 +213,7 @@ const SubscribePost = () => {
 
 						<CardMedia
 							className={classes.media}
-							image={`data:${item.PhotoType};base64,${item.Photo}`}
+							image={`data:${item.photoType};base64,${item.photo}`}
 							title="Paella dish"
 						/>
 
@@ -256,7 +255,7 @@ const SubscribePost = () => {
 						<Divider variant="middle" />
 
 						<List>
-							{item.Comments.map((cmt) => {
+							{item.comments.map((cmt) => {
 								return (
 									<ListItem
 										className={classes.comment_item}
@@ -275,12 +274,12 @@ const SubscribePost = () => {
 														<Link
 															className={classes.links}
 															to={
-																cmt.PostedBy._id !== state._id
-																	? `/profile/${cmt.PostedBy._id}`
+																cmt.postedBy._id !== state._id
+																	? `/profile/${cmt.postedBy._id}`
 																	: "/profile"
 															}
 														>
-															{cmt.PostedBy.Name}
+															{cmt.postedBy.Name}
 														</Link>
 													</Typography>
 													{" — "}
@@ -291,20 +290,20 @@ const SubscribePost = () => {
 									</ListItem>
 								);
 							})}
-							{item.Comments.length === 0 ? (
+							{item.comments.length === 0 ? (
 								<ListItem alignItems="flex-start" style={{ left: "38%" }}>
 									<Typography variant="caption" display="block" gutterBottom>
-										No Comments yet
+										No comments yet
 									</Typography>
 								</ListItem>
 							) : null}
-							{item.Comments.length > 3 && item.Comments.length !== 0 ? (
+							{item.comments.length > 3 && item.comments.length !== 0 ? (
 								<ListItem
 									alignItems="flex-start"
 									className={classes.comment_item_see_more}
 								>
 									<Typography variant="caption" display="block" gutterBottom>
-										See all {item.Comments.length} comments
+										See all {item.comments.length} comments
 									</Typography>
 									<DoubleArrowIcon className={classes.comments_icon_see_more} />
 								</ListItem>

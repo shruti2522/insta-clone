@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import Axios from "axios";
+import axios from "axios";
 import { axiosConfig, CREATE_POST_URL } from "../config/constants";
 import Navbar from "../components/Navbar";
 
@@ -118,7 +118,7 @@ const CreatePoste = () => {
 		// images upload , the max will be 10 images per post
 		const photoEncode = files[0].getFileEncodeBase64String();
 		const photoType = files[0].fileType;
-		Axios.post(
+		axios.post(
 			CREATE_POST_URL,
 			{
 				title: caption,

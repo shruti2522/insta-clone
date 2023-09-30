@@ -4,30 +4,30 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const postSchema = new mongoose.Schema(
 	{
-		Title: {
+		title: {
 			type: String,
 			required: true,
 		},
-		Body: {
+		body: {
 			type: String,
 			required: true,
 		},
-		Photo: {
+		photo: {
 			type: Buffer,
 			default: "no photo",
 		},
-		PhotoType: {
+		photoType: {
 			type: String,
 		},
-		PostedBy: {
+		postedBy: {
 			type: ObjectId,
 			ref: "User",
 		},
-		Likes: [{ type: ObjectId, ref: "User" }],
-		Comments: [
+		likes: [{ type: ObjectId, ref: "User" }],
+		comments: [
 			{
 				Text: String,
-				PostedBy: {
+				postedBy: {
 					type: ObjectId,
 					ref: "User",
 				},

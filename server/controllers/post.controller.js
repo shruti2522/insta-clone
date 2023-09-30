@@ -3,21 +3,21 @@ const Post = require("../models/post.model");
 
 exports.allPost = (req, res) => {
 	Post.find()
-		.populate("PostedBy", "_id username")
-		.populate("Comments.PostedBy", "_id username")
+		.populate("postedBy", "_id username")
+		.populate("comments.postedBy", "_id username")
 		.sort("-createdAt")
 		.then((data) => {
 			let posts = [];
 			data.map((item) => {
 				posts.push({
 					_id: item._id,
-					Title: item.Title,
-					Body: item.Body,
-					PostedBy: item.PostedBy,
-					Photo: item.Photo.toString("base64"),
-					PhotoType: item.PhotoType,
-					Likes: item.Likes,
-					Comments: item.Comments,
+					title: item.title,
+					body: item.body,
+					postedBy: item.postedBy,
+					photo: item.photo.toString("base64"),
+					photoType: item.photoType,
+					likes: item.likes,
+					comments: item.comments,
 				});
 			});
 			res.json({ posts });
@@ -28,9 +28,9 @@ exports.allPost = (req, res) => {
 };
 
 exports.subPost = (req, res) => {
-	Post.find({ PostedBy: { $in: req.user.Following } })
-		.populate("PostedBy", "_id username")
-		.populate("Comments.PostedBy", "_id username")
+	Post.find({ postedBy: { $in: req.user.Following } })
+		.populate("postedBy", "_id username")
+		.populate("comments.postedBy", "_id username")
 		// .sort("-createdAt")
 		.then((data) => {
 			console.log("posts router")
@@ -38,13 +38,13 @@ exports.subPost = (req, res) => {
 			data.map((item) => {
 				posts.push({
 					_id: item._id,
-					Title: item.Title,
-					Body: item.Body,
-					PostedBy: item.PostedBy,
-					Photo: item.Photo.toString("base64"),
-					PhotoType: item.PhotoType,
-					Likes: item.Likes,
-					Comments: item.Comments,
+					title: item.title,
+					body: item.body,
+					postedBy: item.postedBy,
+					photo: item.photo.toString("base64"),
+					photoType: item.photoType,
+					likes: item.likes,
+					comments: item.comments,
 				});
 			});
 			res.json({ posts });
@@ -55,22 +55,22 @@ exports.subPost = (req, res) => {
 };
 
 exports.myPost = (req, res) => {
-	Post.find({ PostedBy: req.user._id })
-		.populate("PostedBy", "_id username")
-		.populate("Comments.PostedBy", "_id username")
+	Post.find({ postedBy: req.user._id })
+		.populate("postedBy", "_id username")
+		.populate("comments.postedBy", "_id username")
 		.sort("-createdAt")
 		.then((data) => {
 			let posts = [];
 			data.map((item) => {
 				posts.push({
 					id: item._id,
-					title: item.Title,
+					title: item.title,
 					body: item.body,
-					//postedBy: item.PostedBy,
-					photo: item.Photo.toString("base64"),
-					photoType: item.PhotoType,
-					likes: item.Likes,
-					Comments: item.Comments,
+					//postedBy: item.postedBy,
+					photo: item.photo.toString("base64"),
+					photoType: item.photoType,
+					likes: item.likes,
+					comments: item.comments,
 				});
 			});
 			res.json({ posts });
@@ -81,27 +81,31 @@ exports.myPost = (req, res) => {
 };
 
 exports.createPost = (req, res) => {
-	const { title, body, photoEncoded, photoType } = req.body;
-	if (!title || !body || !photoEncoded) {
+	const { title, body, photoEncode, photoType } = req.body;
+	console.log("create posts")
+	if (!title || !body || !photoEncode) {
 		return res.json({
 			error: "Please submit all the required fields.",
 		});
 	}
 	const post = new Post({
-		Title: title,
-		Body: body,
-		PostedBy: req.user,
+		title: title,
+		body: body,
+		postedBy: req.user,
 	});
 
-	// savePhoto(post, photoEncode, photoType);
+	// savephoto(post, photoEncode, photoType);
 
-	if (photoEncoded != null) {
-		post.Photo = new Buffer.from(photoEncoded, "base64");
-		post.PhotoType = photoType;
+	if (photoEncode != null) {
+		console.log("photo encoded")
+		post.photo = new Buffer.from(photoEncode, "base64");
+		post.photoType = photoType;
 	}
 
 	post.save()
-		.then((result) => {
+		.then(() => {
+			console.log(post)
+			console.log("post created successfully!!!!!")
 			res.json({ message: "Post created successfully" });
 		})
 		.catch((err) => {
@@ -113,24 +117,24 @@ exports.like = (req, res) => {
 	Post.findByIdAndUpdate(
 		req.body.postId,
 		{
-			$push: { Likes: req.user._id },
+			$push: { likes: req.user._id },
 		},
 		{ new: true }
 	)
-		.populate("PostedBy", "_id username")
-		.populate("Comments.PostedBy", "_id username")
+		.populate("postedBy", "_id username")
+		.populate("comments.postedBy", "_id username")
 		.exec((err, result) => {
 			if (err) return res.status(422).json({ Error: err });
 			else {
 				res.json({
 					_id: result._id,
-					Title: result.Title,
-					Body: result.Body,
-					PostedBy: result.PostedBy,
-					Photo: result.Photo.toString("base64"),
-					PhotoType: result.PhotoType,
-					Likes: result.Likes,
-					Comments: result.Comments,
+					title: result.title,
+					body: result.body,
+					postedBy: result.postedBy,
+					photo: result.photo.toString("base64"),
+					photoType: result.photoType,
+					likes: result.likes,
+					comments: result.comments,
 				});
 			}
 		});
@@ -140,53 +144,53 @@ exports.unlike = (req, res) => {
 	Post.findByIdAndUpdate(
 		req.body.postId,
 		{
-			$pull: { Likes: req.user._id },
+			$pull: { likes: req.user._id },
 		},
 		{ new: true }
 	)
-		.populate("PostedBy", "_id username")
-		.populate("Comments.PostedBy", "_id username")
+		.populate("postedBy", "_id username")
+		.populate("comments.postedBy", "_id username")
 		.exec((err, result) => {
 			if (err) return res.status(422).json({ Error: err });
 			else {
 				console.log(result);
 				res.json({
 					_id: result._id,
-					Title: result.Title,
-					Body: result.Body,
-					PostedBy: result.PostedBy,
-					Photo: result.Photo.toString("base64"),
-					PhotoType: result.PhotoType,
-					Likes: result.Likes,
-					Comments: result.Comments,
+					title: result.title,
+					body: result.body,
+					postedBy: result.postedBy,
+					photo: result.photo.toString("base64"),
+					photoType: result.photoType,
+					likes: result.likes,
+					comments: result.comments,
 				});
 			}
 		});
 };
 
 exports.comment = (req, res) => {
-	const comment = { Text: req.body.text, PostedBy: req.user._id };
+	const comment = { Text: req.body.text, postedBy: req.user._id };
 	Post.findByIdAndUpdate(
 		req.body.postId,
 		{
-			$push: { Comments: comment },
+			$push: { comments: comment },
 		},
 		{ new: true }
 	)
-		.populate("Comments.PostedBy", "_id username")
-		.populate("PostedBy", "_id username")
+		.populate("comments.postedBy", "_id username")
+		.populate("postedBy", "_id username")
 		.exec((err, result) => {
 			if (err) return res.status(422).json({ Error: err });
 			else {
 				res.json({
 					_id: result._id,
-					Title: result.Title,
-					Body: result.Body,
-					PostedBy: result.PostedBy,
-					Photo: result.Photo.toString("base64"),
-					PhotoType: result.PhotoType,
-					Likes: result.Likes,
-					Comments: result.Comments,
+					title: result.title,
+					body: result.body,
+					postedBy: result.postedBy,
+					photo: result.photo.toString("base64"),
+					photoType: result.photoType,
+					likes: result.likes,
+					comments: result.comments,
 				});
 			}
 		});
@@ -194,10 +198,10 @@ exports.comment = (req, res) => {
 
 exports.deletePost = (req, res) => {
 	Post.findOne({ _id: req.params.postId })
-		.populate("PostedBy", "_id")
+		.populate("postedBy", "_id")
 		.exec((err, post) => {
-			if (err || !post) return res.status(422).json({ Error: err });
-			if (post.PostedBy._id.toString() === req.user._id.toString()) {
+			if (err || !post) return res.status(422).json({ error: err });
+			if (post.postedBy._id.toString() === req.user._id.toString()) {
 				post.remove()
 					.then((result) => {
 						res.json(result._id);
