@@ -93,6 +93,7 @@ const Login = () => {
 		
 		Cookies.set('authToken', token, { expires: 7 }); 
 		dispatch({ type: FETCH_USER_DATA, payload: responseData.data.user });
+		console.log("payload",responseData.data.user)
 		history.push("/");
 
 		console.log(responseData.message);

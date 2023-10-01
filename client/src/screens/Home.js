@@ -131,6 +131,13 @@ const Home = () => {
   // Modify your axios configuration to include the token
     const config = axiosConfig();
 
+	useEffect(() => {
+		axios.get(ALL_POST_URL, config).then((res) => {
+			console.log("POST DATA",res.data.posts)
+			setData(res.data.posts);
+		});
+	}, []);
+
 	const likePost = (id) => {
 		axios.put(`http://localhost:5000/like`, { postId: id }, config)
 			.then((result) => {
@@ -160,7 +167,7 @@ const Home = () => {
 			.then((result) => {
 				dispatch({
 					type: BOOKMARK_POST,
-					payload: { Bookmarks: result.data.Bookmarks },
+					payload: { bookmarks: result.data.bookmarks },
 				});
 				localStorage.setItem("user", JSON.stringify(result.data));
 			})
@@ -172,7 +179,7 @@ const Home = () => {
 			.then((result) => {
 				dispatch({
 					type: BOOKMARK_POST,
-					payload: { Bookmarks: result.data.Bookmarks },
+					payload: { bookmarks: result.data.bookmarks },
 				});
 				localStorage.setItem("user", JSON.stringify(result.data));
 			})
@@ -202,10 +209,14 @@ const Home = () => {
 		});
 	};
 
+	console.log("data",data)
+	console.log("state",state)
+
 	return (
 		<>
 			<Navbar />
 			{data.map((item) => (
+
 				<div className="home" key={item._id}>
 					<Card className={classes.root}>
 						<CardHeader
@@ -215,7 +226,7 @@ const Home = () => {
 									<img
 										className={classes.avatar}
 										alt=""
-										src={`data:${item.PhotoType};base64,${item.Photo}`}
+										src={`data:${item.photoType};base64,${item.photo}`}
 									/>
 								</Avatar>
 							}
@@ -223,12 +234,12 @@ const Home = () => {
 								<Link
 									className={classes.links}
 									to={
-										item.PostedBy._id !== state._id
-											? `/profile/${item.PostedBy._id}`
+										item.postedBy._id !== state.user._id
+											? `/profile/${item.postedBy._id}`
 											: "/profile"
 									}
 								>
-									{item.PostedBy.Name}
+									{item.postedBy.username}
 								</Link>
 							}
 							subheader="September 14, 2016"
@@ -236,12 +247,12 @@ const Home = () => {
 
 						<CardMedia
 							className={classes.media}
-							image={`data:${item.PhotoType};base64,${item.Photo}`}
+							image={`data:${item.photoType};base64,${item.photo}`}
 							title="Paella dish"
 						/>
 
 						<CardActions className={classes.likeBar} disableSpacing>
-							{item.Likes.includes(state._id) ? (
+							{item.likes.includes(state.user._id) ? (
 								<IconButton
 									aria-label="Like"
 									color="secondary"
@@ -264,7 +275,7 @@ const Home = () => {
 							<IconButton aria-label="comments">
 								<ChatBubbleOutlineIcon />
 							</IconButton>
-							{state.Bookmarks.includes(item._id) ? (
+							{state.user.bookmarks.includes(item._id) ? (
 								<IconButton
 									aria-label="Remove Bookmark"
 									style={{ marginLeft: "auto", color: "#e0d011" }}
@@ -289,17 +300,17 @@ const Home = () => {
 
 						<CardContent>
 							<Typography variant="subtitle2" display="block" gutterBottom>
-								{item.Likes.length} Likes
+								{item.likes.length} likes
 							</Typography>
 							<Typography variant="body2" color="textSecondary" component="p">
-								{item.Body}
+								{item.body}
 							</Typography>
 						</CardContent>
 
 						<Divider variant="middle" />
 
 						<List>
-							{item.Comments.map((cmt) => {
+							{item.comments.map((cmt) => {
 								return (
 									<ListItem
 										className={classes.comment_item}
@@ -318,12 +329,12 @@ const Home = () => {
 														<Link
 															className={classes.links}
 															to={
-																cmt.PostedBy._id !== state._id
-																	? `/profile/${cmt.PostedBy._id}`
+																cmt.postedBy._id !== state.user._id
+																	? `/profile/${cmt.postedBy._id}`
 																	: "/profile"
 															}
 														>
-															{cmt.PostedBy.Name}
+															{cmt.postedBy.Name}
 														</Link>
 													</Typography>
 													{" — "}
@@ -334,20 +345,20 @@ const Home = () => {
 									</ListItem>
 								);
 							})}
-							{item.Comments.length === 0 ? (
+							{item.comments.length === 0 ? (
 								<ListItem alignItems="flex-start" style={{ left: "38%" }}>
 									<Typography variant="caption" display="block" gutterBottom>
-										No Comments yet
+										No comments yet
 									</Typography>
 								</ListItem>
 							) : null}
-							{item.Comments.length > 3 && item.Comments.length !== 0 ? (
+							{item.comments.length > 3 && item.comments.length !== 0 ? (
 								<ListItem
 									alignItems="flex-start"
 									className={classes.comment_item_see_more}
 								>
 									<Typography variant="caption" display="block" gutterBottom>
-										See all {item.Comments.length} comments
+										See all {item.comments.length} comments
 									</Typography>
 									<DoubleArrowIcon className={classes.comments_icon_see_more} />
 								</ListItem>

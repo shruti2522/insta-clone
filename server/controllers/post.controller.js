@@ -28,7 +28,7 @@ exports.allPost = (req, res) => {
 };
 
 exports.subPost = (req, res) => {
-	Post.find({ postedBy: { $in: req.user.Following } })
+	Post.find({ postedBy: { $in: req.user.following } })
 		.populate("postedBy", "_id username")
 		.populate("comments.postedBy", "_id username")
 		// .sort("-createdAt")
@@ -169,7 +169,7 @@ exports.unlike = (req, res) => {
 };
 
 exports.comment = (req, res) => {
-	const comment = { Text: req.body.text, postedBy: req.user._id };
+	const comment = { text: req.body.text, postedBy: req.user._id };
 	Post.findByIdAndUpdate(
 		req.body.postId,
 		{

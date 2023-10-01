@@ -41,8 +41,8 @@ const Routing = () => {
 				<Route exact path="/reset/:token" component={NewPass} />
 
 				{/* Protected routes */}
-				<ProtectedRoute exact path="/" component={SubscribePost}  />
-				<ProtectedRoute exact path="/explore" component={Home}  />
+				<ProtectedRoute exact path="/" component={Home}  />
+				<ProtectedRoute exact path="/explore" component={SubscribePost}  />
 				<ProtectedRoute exact path="/create" component={CreatePost}  />
 				<ProtectedRoute exact path="/profile" component={Profile}  />
 				<ProtectedRoute exact path="/profile/:userid" component={UserProfile}  />
