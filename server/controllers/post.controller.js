@@ -47,7 +47,7 @@ exports.subPost = (req, res) => {
 					photoType: item.photoType,
 					likes: item.likes,
 					comments: item.comments,
-					createdAt: item.createdA
+					createdAt: item.createdAt
 				});
 			});
 			res.json({ posts });
@@ -74,7 +74,7 @@ exports.myPost = (req, res) => {
 					photoType: item.photoType,
 					likes: item.likes,
 					comments: item.comments,
-					createdAt: item.createdA
+					createdAt: item.createdAt
 				});
 			});
 			res.json({ posts });
@@ -149,7 +149,7 @@ exports.like = (req, res) => {
 					photoType: result.photoType,
 					likes: result.likes,
 					comments: result.comments,
-					createdAt: item.createdA
+					createdAt: result.createdAt
 				});
 			}
 		});
@@ -178,7 +178,7 @@ exports.unlike = (req, res) => {
 					photoType: result.photoType,
 					likes: result.likes,
 					comments: result.comments,
-					createdAt: item.createdA
+					createdAt: result.createdAt
 				});
 			}
 		});
@@ -207,7 +207,7 @@ exports.comment = (req, res) => {
 					photoType: result.photoType,
 					likes: result.likes,
 					comments: result.comments,
-					createdAt: item.createdA
+					createdAt: result.createdAt
 				});
 			}
 		});
