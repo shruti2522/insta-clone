@@ -35,7 +35,8 @@ import SendIcon from "@material-ui/icons/Send";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
-import Cookies from "js-cookie";
+import { formatDistanceToNow } from "date-fns";
+
 
 // General style
 const useStyles = makeStyles((theme) => ({
@@ -244,7 +245,7 @@ const Home = () => {
 									{item.postedBy.username}
 								</Link>
 							}
-							subheader="September 14, 2016"
+							subheader={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
 						/>
 
 						<CardMedia
@@ -339,11 +340,11 @@ const Home = () => {
 																	: "/profile"
 															}
 														>
-															{cmt.postedBy.Name}
+															{cmt.postedBy.username}
 														</Link>
 													</Typography>
 													{" — "}
-													{cmt.Text}
+													{cmt.text}
 												</React.Fragment>
 											}
 										/>

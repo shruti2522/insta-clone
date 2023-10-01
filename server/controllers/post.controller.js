@@ -18,6 +18,8 @@ exports.allPost = (req, res) => {
 					photoType: item.photoType,
 					likes: item.likes,
 					comments: item.comments,
+					createdAt: item.createdAt
+
 				});
 			});
 			res.json({ posts });
@@ -45,6 +47,7 @@ exports.subPost = (req, res) => {
 					photoType: item.photoType,
 					likes: item.likes,
 					comments: item.comments,
+					createdAt: item.createdA
 				});
 			});
 			res.json({ posts });
@@ -71,6 +74,7 @@ exports.myPost = (req, res) => {
 					photoType: item.photoType,
 					likes: item.likes,
 					comments: item.comments,
+					createdAt: item.createdA
 				});
 			});
 			res.json({ posts });
@@ -103,10 +107,20 @@ exports.createPost = (req, res) => {
 	}
 
 	post.save()
-		.then(() => {
-			console.log(post)
-			console.log("post created successfully!!!!!")
-			res.json({ message: "Post created successfully" });
+		.then((createdPost) => {
+			// Include createdAt field in the response
+			const { _id, title, body, createdAt, photoType } = createdPost;
+			console.log("post created successfully!!!!!", createdPost);
+			res.json({
+				message: "Post created successfully",
+				post: {
+					_id,
+					title,
+					body,
+					createdAt,
+					photoType,
+				},
+			});
 		})
 		.catch((err) => {
 			console.log(err);
@@ -135,6 +149,7 @@ exports.like = (req, res) => {
 					photoType: result.photoType,
 					likes: result.likes,
 					comments: result.comments,
+					createdAt: item.createdA
 				});
 			}
 		});
@@ -163,6 +178,7 @@ exports.unlike = (req, res) => {
 					photoType: result.photoType,
 					likes: result.likes,
 					comments: result.comments,
+					createdAt: item.createdA
 				});
 			}
 		});
@@ -191,6 +207,7 @@ exports.comment = (req, res) => {
 					photoType: result.photoType,
 					likes: result.likes,
 					comments: result.comments,
+					createdAt: item.createdA
 				});
 			}
 		});
