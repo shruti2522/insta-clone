@@ -53,10 +53,13 @@ const UserProfilePage = () => {
 	const classes = useStyles();
 	const [value, setValue] = useState("Posts"); // to switch between different tabs
 	const { state, dispatch } = useContext(AuthenticationContext);
+	console.log('user profile state here',state)
+
+
 	const { userid } = useParams();
 	const [data, setData] = useState(null);
-	const [showFollow, setShowFollow] = useState(state ? !state.Following.includes(userid) : null);
-
+	const [showFollow, setShowFollow] = useState(state.user ? !state.user.following.includes(userid) : null);
+	
 	const config = axiosConfig();
 
 	useEffect(() => {
@@ -69,7 +72,7 @@ const UserProfilePage = () => {
 		axios.put(`http://localhost:5000/follow`, { followId: userid }, config).then((result) => {
 			dispatch({
 				type: UPDATE_FOLLOW_DATA,
-				payload: { Followers: result.data.Followers, Following: result.data.Following },
+				payload: { followers: result.data.followers, following: result.data.following },
 			});
 			localStorage.setItem("user", JSON.stringify(result.data));
 			setData((prevState) => {
@@ -77,7 +80,7 @@ const UserProfilePage = () => {
 					...prevState,
 					user: {
 						...prevState.user,
-						Followers: [...prevState.user.Followers, result.data._id],
+						followers: [...prevState.user.followers, result.data._id],
 					},
 				};
 			});
@@ -89,22 +92,24 @@ const UserProfilePage = () => {
 		axios.put(`http://localhost:5000/unfollow`, { unfollowId: userid }, config).then((result) => {
 			dispatch({
 				type: UPDATE_FOLLOW_DATA,
-				payload: { Followers: result.data.Followers, Following: result.data.Following },
+				payload: { followers: result.data.followers, following: result.data.following },
 			});
 			localStorage.setItem("user", JSON.stringify(result.data));
 			setData((prevState) => {
-				const newFollower = prevState.user.Followers.filter((item) => item !== result.data._id);
+				const newFollower = prevState.user.followers.filter((item) => item !== result.data._id);
 				return {
 					...prevState,
 					user: {
 						...prevState.user,
-						Followers: newFollower,
+						followers: newFollower,
 					},
 				};
 			});
 			setShowFollow(true);
 		});
 	};
+
+	console.log("user data",data);
 
 	return (
 		<React.Fragment>
@@ -167,7 +172,7 @@ const UserProfilePage = () => {
 											<Typography variant="subtitle1">
 												<b>
 													{data.user
-														? data.user.Followers.length
+														? data.user.followers.length
 														: "IsLoading..."}
 												</b>{" "}
 												followers
@@ -177,7 +182,7 @@ const UserProfilePage = () => {
 											<Typography variant="subtitle1">
 												<b>
 													{data.user
-														? data.user.Following.length
+														? data.user.following.length
 														: "IsLoading..."}
 												</b>{" "}
 												following

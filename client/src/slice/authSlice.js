@@ -10,7 +10,7 @@ const initialState = {
 
 export const signUp = createAsyncThunk(SIGNUP_URL, async ({firstname,lastname,username,email,password}) => {
   try {
-    const response = await fetch(SIGNUP_URL + "/signup", {
+    const response = await fetch(SIGNUP_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

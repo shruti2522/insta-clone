@@ -127,6 +127,7 @@ const Home = () => {
 	const [data, setData] = useState([]);
 	const [showSend, setShowSend] = useState(false);
 	const [comment, setComment] = useState("");
+	const [showAllComments, setShowAllComments] = useState({});
 
   // Modify your axios configuration to include the token
     const config = axiosConfig();
@@ -165,6 +166,7 @@ const Home = () => {
 	const bookmark = (id) => {
 		axios.put(`http://localhost:5000/bookmark-post`, { postId: id }, config)
 			.then((result) => {
+				console.log("result",result.data.bookmarks)
 				dispatch({
 					type: BOOKMARK_POST,
 					payload: { bookmarks: result.data.bookmarks },
@@ -310,7 +312,10 @@ const Home = () => {
 						<Divider variant="middle" />
 
 						<List>
-							{item.comments.map((cmt) => {
+							{item.comments.map((cmt, index) => {
+								if (!showAllComments[item._id] && index >= 2) {
+									return null; 
+								}
 								return (
 									<ListItem
 										className={classes.comment_item}
@@ -352,16 +357,24 @@ const Home = () => {
 									</Typography>
 								</ListItem>
 							) : null}
-							{item.comments.length > 3 && item.comments.length !== 0 ? (
-								<ListItem
-									alignItems="flex-start"
-									className={classes.comment_item_see_more}
-								>
-									<Typography variant="caption" display="block" gutterBottom>
-										See all {item.comments.length} comments
-									</Typography>
-									<DoubleArrowIcon className={classes.comments_icon_see_more} />
-								</ListItem>
+							{item.comments.length > 2 && item.comments.length !== 0 ? (
+							<ListItem
+								alignItems="flex-start"
+								className={classes.comment_item_see_more}
+								onClick={() => {
+								setShowAllComments((prevShowAllComments) => ({
+									...prevShowAllComments,
+									[item._id]: !prevShowAllComments[item._id], 
+								}));
+								}}
+							>
+								<Typography variant="caption" display="block" gutterBottom>
+								{showAllComments[item._id]
+									? `Hide all comments`
+									: `See all ${item.comments.length} comments`}
+								</Typography>
+								<DoubleArrowIcon className={classes.comments_icon_see_more} />
+							</ListItem>
 							) : null}
 						</List>
 
