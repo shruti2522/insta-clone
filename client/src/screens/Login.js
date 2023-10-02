@@ -1,6 +1,6 @@
 
 import React, { useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 // import { FETCH_USER_DATA } from "../contexts/types.js";
 // import { LOGIN_URL } from "../config/constants";
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const dispatch = useDispatch();
 
-  const history = useHistory();
+  const history = useNavigate();
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,7 +77,7 @@ const Login = () => {
         try {
 			console.log("button clicked")
 			dispatch(logIn({ email, password }))
-			history.push('/');
+			history('/');
 		} catch (error) {
 		setAuthValidation(true);
 		}

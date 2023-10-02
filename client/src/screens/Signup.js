@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SIGNUP_URL } from "../config/constants";
 import Copyright from "../components/Copyight";
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Signup = () => {
-	const history = useHistory();
+	const history = useNavigate();
 	const classes = useStyles();
 	const [firstname, setfirstname] = useState("");
 	const [lastname, setlastname] = useState("");
@@ -82,7 +82,7 @@ const Signup = () => {
 		}
         try {
 			dispatch(signUp({firstname ,lastname, username, email, password }));
-			history.push('/login'); 
+			history('/login'); 
 		} catch (error) {
 		setAuthValidation(true);
 		}

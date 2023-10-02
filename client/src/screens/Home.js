@@ -1,9 +1,4 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
+
 
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
@@ -130,8 +125,8 @@ const Home = () => {
 
 	const token = Cookies.get("authToken");
 
-  // Modify your axios configuration to include the token
-    const config = axiosConfig(token);
+	// Modify your axios configuration to include the token
+	const config = axiosConfig(token);
 
 	const likePost = (id) => {
 		axios.put(`http://localhost:5000/like`, { postId: id }, config)

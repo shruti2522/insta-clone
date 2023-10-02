@@ -8,16 +8,8 @@
     "prod": "cross-env NODE_ENV=production node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TheLordA/Instagram-Clone.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/TheLordA/Instagram-Clone/issues"
-  },
-  "homepage": "https://github.com/TheLordA/Instagram-Clone",
   "dependencies": {
     "@sendgrid/mail": "^7.4.6",
     "bcryptjs": "^2.4.3",

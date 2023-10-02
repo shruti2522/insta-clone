@@ -1,12 +1,7 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
+
 
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 import axios from "axios";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { UPDATE_FOLLOW_DATA } from "../contexts/types";
@@ -214,14 +209,14 @@ const UserProfilePage = () => {
 						<Grid container spacing={2}>
 							{data.posts
 								? data.posts.map((item) => (
-										<Grid item xs={4} key={item.id}>
-											<img
-												alt="post"
-												style={{ width: "100%", height: "100%" }}
-												src={`data:${item.PhotoType};base64,${item.Photo}`}
-											/>
-										</Grid>
-								  ))
+									<Grid item xs={4} key={item.id}>
+										<img
+											alt="post"
+											style={{ width: "100%", height: "100%" }}
+											src={`data:${item.PhotoType};base64,${item.Photo}`}
+										/>
+									</Grid>
+								))
 								: "Is Loading ..."}
 
 							<Grid item xs={4} className={classes.post_box}>

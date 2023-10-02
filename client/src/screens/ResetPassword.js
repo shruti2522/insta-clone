@@ -1,12 +1,7 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
+
 
 import React, { useState, useRef, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import axios from "axios";
 import { RESET_PWD_URL } from "../config/constants";
 import { EmailRegex } from "../utils/regex";
@@ -59,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Reset = () => {
-	const history = useHistory();
+	const history = useNavigate();
 	const classes = useStyles();
 	const [email, setEmail] = useState("");
 
@@ -104,7 +99,7 @@ const Reset = () => {
 						setSuccessMsg(true);
 						// set a time before we redirect the user to login page
 						timerRef.current = setTimeout(() => {
-							history.push("/login");
+							history("/login");
 						}, 3000);
 					}
 				})
