@@ -1,12 +1,6 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
 
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { axiosConfig, CREATE_POST_URL } from "../config/constants";
@@ -95,7 +89,7 @@ const getSteps = () => {
 
 const CreatePoste = () => {
 	const classes = useStyles();
-	const history = useHistory();
+	const navigate = useNavigate();
 	const [files, setFiles] = useState([]);
 	const [caption, setCaption] = useState("");
 	const [activeStep, setActiveStep] = useState(0);
@@ -187,7 +181,7 @@ const CreatePoste = () => {
 		}
 		setQuery("progress");
 		timerRef.current = setTimeout(() => {
-			history.push("/");
+			navigate("/");
 		}, 4000);
 	};
 

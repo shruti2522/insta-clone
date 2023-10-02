@@ -1,12 +1,6 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
 
 import React, { useContext, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { LOGOUT } from "../contexts/types";
 import Axios from "axios";
@@ -144,7 +138,7 @@ const getModalStyle = () => {
 
 const Navbar = () => {
 	const { state, dispatch } = useContext(AuthenticationContext);
-	const history = useHistory();
+	const navigate = useNavigate();
 	const [search, setSearch] = useState([]);
 
 	// Material-Ui
@@ -158,7 +152,7 @@ const Navbar = () => {
 
 	const findUser = (pattern) => {
 		if (!(pattern === "")) {
-			const URL = `http://localhost:5000/users-research`;
+			const URL = `http://localhost:8000/users-research`;
 			const config = {
 				headers: {
 					Authorization: "Bearer " + Cookies.get('authToken'),
@@ -190,7 +184,7 @@ const Navbar = () => {
 	const handleLogOut = () => {
 		localStorage.clear();
 		dispatch({ type: LOGOUT });
-		history.push("/login");
+		navigate("/login");
 	};
 
 	const mobileMenuId = "primary-search-account-menu-mobile";
@@ -297,35 +291,35 @@ const Navbar = () => {
 			<List className={classes.root}>
 				{search.user
 					? search.user.map((item) => {
-							return (
-								<Link
-									className={classes.links}
-									key={item._id}
-									to={item._id !== state._id ? `/profile/${item._id}` : "/profile"}
-									onClick={handleCloseModal}
-								>
-									<Divider
-										variant="inset"
-										component="li"
-										style={{ marginLeft: "0px" }}
-									/>
-									<ListItem alignItems="flex-start">
-										<ListItemAvatar>
-											<Avatar
-												alt="Remy Sharp"
-												src="/static/images/avatar/1.jpg"
-											/>
-										</ListItemAvatar>
-										<ListItemText
-											primary={item.Name}
-											secondary={
-												<React.Fragment>{item.Email}</React.Fragment>
-											}
+						return (
+							<Link
+								className={classes.links}
+								key={item._id}
+								to={item._id !== state._id ? `/profile/${item._id}` : "/profile"}
+								onClick={handleCloseModal}
+							>
+								<Divider
+									variant="inset"
+									component="li"
+									style={{ marginLeft: "0px" }}
+								/>
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar
+											alt="Remy Sharp"
+											src="/static/images/avatar/1.jpg"
 										/>
-									</ListItem>
-								</Link>
-							);
-					  })
+									</ListItemAvatar>
+									<ListItemText
+										primary={item.Name}
+										secondary={
+											<React.Fragment>{item.Email}</React.Fragment>
+										}
+									/>
+								</ListItem>
+							</Link>
+						);
+					})
 					: null}
 			</List>
 		</div>

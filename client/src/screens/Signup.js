@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SIGNUP_URL } from "../config/constants";
 import Copyright from "../components/Copyight";
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Signup = () => {
-	const history = useHistory();
+	const navigate = useNavigate();
 	const classes = useStyles();
 	const [firstname, setfirstname] = useState("");
 	const [lastname, setlastname] = useState("");
@@ -70,21 +70,21 @@ const Signup = () => {
 			setPassword(value);
 		} else if (name === "firstname") {
 			setfirstname(value);
-		} else if (name === "lastname") {	
+		} else if (name === "lastname") {
 			setlastname(value);
 		}
 	};
 
 	const handleSignUp = async () => {
 		if (!EmailRegex.test(email)) {
-		setFormatValidation(true);
-		return;
+			setFormatValidation(true);
+			return;
 		}
-        try {
-			dispatch(signUp({firstname ,lastname, username, email, password }));
-			history.push('/login'); 
+		try {
+			dispatch(signUp({ firstname, lastname, username, email, password }));
+			navigate('/login');
 		} catch (error) {
-		setAuthValidation(true);
+			setAuthValidation(true);
 		}
 	};
 
@@ -130,7 +130,7 @@ const Signup = () => {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
-							    autoComplete="LastName"
+								autoComplete="LastName"
 								name="lastname"
 								variant="outlined"
 								required
@@ -138,7 +138,7 @@ const Signup = () => {
 								label="Last Name"
 								value={lastname}
 								onChange={handleInputChanges}
-								
+
 							/>
 						</Grid>
 						<Grid item xs={12}>

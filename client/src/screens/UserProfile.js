@@ -1,9 +1,3 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
 
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -53,23 +47,23 @@ const UserProfilePage = () => {
 	const classes = useStyles();
 	const [value, setValue] = useState("Posts"); // to switch between different tabs
 	const { state, dispatch } = useContext(AuthenticationContext);
-	console.log('user profile state here',state)
+	console.log('user profile state here', state)
 
 
 	const { userid } = useParams();
 	const [data, setData] = useState(null);
 	const [showFollow, setShowFollow] = useState(state.user ? !state.user.following.includes(userid) : null);
-	
+
 	const config = axiosConfig();
 
 	useEffect(() => {
-		axios.get(`http://localhost:5000/user/${userid}`, config).then((res) => {
+		axios.get(`http://localhost:8000/user/${userid}`, config).then((res) => {
 			setData(res.data);
 		});
 	}, []);
 
 	const followUser = () => {
-		axios.put(`http://localhost:5000/follow`, { followId: userid }, config).then((result) => {
+		axios.put(`http://localhost:8000/follow`, { followId: userid }, config).then((result) => {
 			dispatch({
 				type: UPDATE_FOLLOW_DATA,
 				payload: { followers: result.data.followers, following: result.data.following },
@@ -89,7 +83,7 @@ const UserProfilePage = () => {
 	};
 
 	const unfollowUser = () => {
-		axios.put(`http://localhost:5000/unfollow`, { unfollowId: userid }, config).then((result) => {
+		axios.put(`http://localhost:8000/unfollow`, { unfollowId: userid }, config).then((result) => {
 			dispatch({
 				type: UPDATE_FOLLOW_DATA,
 				payload: { followers: result.data.followers, following: result.data.following },
@@ -109,7 +103,7 @@ const UserProfilePage = () => {
 		});
 	};
 
-	console.log("user data",data);
+	console.log("user data", data);
 
 	return (
 		<React.Fragment>
@@ -219,14 +213,14 @@ const UserProfilePage = () => {
 						<Grid container spacing={2}>
 							{data.posts
 								? data.posts.map((item) => (
-										<Grid item xs={4} key={item.id}>
-											<img
-												alt="post"
-												style={{ width: "100%", height: "100%" }}
-												src={`data:${item.PhotoType};base64,${item.Photo}`}
-											/>
-										</Grid>
-								  ))
+									<Grid item xs={4} key={item.id}>
+										<img
+											alt="post"
+											style={{ width: "100%", height: "100%" }}
+											src={`data:${item.PhotoType};base64,${item.Photo}`}
+										/>
+									</Grid>
+								))
 								: "Is Loading ..."}
 
 							<Grid item xs={4} className={classes.post_box}>

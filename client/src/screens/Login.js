@@ -1,6 +1,6 @@
 
 import React, { useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { FETCH_USER_DATA } from "../contexts/types.js";
 import { LOGIN_URL } from "../config/constants";
@@ -50,67 +50,68 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
-  const dispatchUser = useDispatch();
+	const dispatchUser = useDispatch();
 
-  const history = useHistory();
-  const classes = useStyles();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [formatValidation, setFormatValidation] = useState(false);
-  const [authValidation, setAuthValidation] = useState(false); 
-  const { dispatch } = useContext(AuthenticationContext);
+	const navigate = useNavigate();
+	const classes = useStyles();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [formatValidation, setFormatValidation] = useState(false);
+	const [authValidation, setAuthValidation] = useState(false);
+	const { dispatch } = useContext(AuthenticationContext);
 
-  const handleInputChanges = (e) => {
-	const { name, value } = e.target;
-	if (name === "email") {
-		setEmail(value);
-	} else if (name === "password") {
-		setPassword(value);
-	}
-  };
-
-  const handleLogin = async () => {
-	if (EmailRegex.test(email)) {
-		try {
-		const response = await fetch(LOGIN_URL, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			email,
-			password
-		}),
-		});
-
-		if (!response.ok) {
-		const errorData = await response.json();
-		throw new Error(errorData.message);
+	const handleInputChanges = (e) => {
+		const { name, value } = e.target;
+		if (name === "email") {
+			setEmail(value);
+		} else if (name === "password") {
+			setPassword(value);
 		}
+	};
 
-		const responseData = await response.json();
-		const token = responseData.data.token; 
-		
-		Cookies.set('authToken', token, { expires: 7 }); 
-		dispatch({ type: FETCH_USER_DATA, payload: responseData.data.user });
-		console.log("payload",responseData.data.user)
-		history.push("/");
+	const handleLogin = async () => {
+		if (EmailRegex.test(email)) {
+			try {
+				const response = await fetch(LOGIN_URL, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						email,
+						password
+					}),
+				});
 
-		console.log(responseData.message);
-		console.log(responseData)
-		return responseData;
-	} catch (error) {
-		console.error("Error during sign up:", error);
-		if (error.response) {
-		console.error("Response status:", error.response.status);
-		console.error("Response data:", error.response.data);
-		}
-		throw error;}
+				if (!response.ok) {
+					const errorData = await response.json();
+					throw new Error(errorData.message);
+				}
+
+				const responseData = await response.json();
+				const token = responseData.data.token;
+
+				Cookies.set('authToken', token, { expires: 7 });
+				dispatch({ type: FETCH_USER_DATA, payload: responseData.data.user });
+				console.log("payload", responseData.data.user)
+				navigate("/");
+
+				console.log(responseData.message);
+				console.log(responseData)
+				return responseData;
+			} catch (error) {
+				console.error("Error during sign up:", error);
+				if (error.response) {
+					console.error("Response status:", error.response.status);
+					console.error("Response data:", error.response.data);
+				}
+				throw error;
+			}
 		} else {
 			setAuthValidation(false);
 			setFormatValidation(true);
 		}
-  }
+	}
 
 	return (
 		<Grid container>

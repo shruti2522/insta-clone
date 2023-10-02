@@ -1,12 +1,6 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <ferrak.anass@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Clone
- *
- */
 
 import React, { useState, useRef, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NEW_PWD_URL } from "../config/constants";
 import Copyright from "../components/Copyight";
 import axios from "axios";
@@ -58,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NewPass = () => {
 	const classes = useStyles();
-	const history = useHistory();
+	const navigate = useNavigate();
 	const { token } = useParams();
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -87,7 +81,7 @@ const NewPass = () => {
 					setSuccessMsg(true);
 					// set a time before we redirect the user to login page
 					timerRef.current = setTimeout(() => {
-						history.push("/login");
+						navigate("/login");
 					}, 3000);
 				}
 			})
