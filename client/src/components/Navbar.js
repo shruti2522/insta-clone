@@ -41,6 +41,7 @@ import AllInboxOutlinedIcon from "@material-ui/icons/AllInboxOutlined";
 import NotificationsActiveOutlinedIcon from "@material-ui/icons/NotificationsActiveOutlined";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -160,7 +161,7 @@ const Navbar = () => {
 			const URL = `http://localhost:5000/users-research`;
 			const config = {
 				headers: {
-					Authorization: "Bearer " + localStorage.getItem("jwt"),
+					Authorization: "Bearer " + Cookies.get('authToken'),
 				},
 			};
 			Axios.post(URL, { pattern }, config).then((res) => {
