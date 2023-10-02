@@ -177,7 +177,7 @@ exports.updatePicture = (req, res) => {
 
 exports.userSearch = (req, res) => {
 	let pattern = new RegExp("^" + req.body.pattern);
-	User.find({ email: { $regex: pattern } })
+	User.find({ username: { $regex: pattern } })
 		.select("_id email username")
 		.then((user) => {
 			res.json({ user });

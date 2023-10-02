@@ -291,35 +291,35 @@ const Navbar = () => {
 			<List className={classes.root}>
 				{search.user
 					? search.user.map((item) => {
-						return (
-							<Link
-								className={classes.links}
-								key={item._id}
-								to={item._id !== state._id ? `/profile/${item._id}` : "/profile"}
-								onClick={handleCloseModal}
-							>
-								<Divider
-									variant="inset"
-									component="li"
-									style={{ marginLeft: "0px" }}
-								/>
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar
-											alt="Remy Sharp"
-											src="/static/images/avatar/1.jpg"
-										/>
-									</ListItemAvatar>
-									<ListItemText
-										primary={item.Name}
-										secondary={
-											<React.Fragment>{item.Email}</React.Fragment>
-										}
+							return (
+								<Link
+									className={classes.links}
+									key={item._id}
+									to={item._id !== state.user._id ? `/profile/${item._id}` : "/profile"}
+									onClick={handleCloseModal}
+								>
+									<Divider
+										variant="inset"
+										component="li"
+										style={{ marginLeft: "0px" }}
 									/>
-								</ListItem>
-							</Link>
-						);
-					})
+									<ListItem alignItems="flex-start">
+										<ListItemAvatar>
+											<Avatar
+												alt="Remy Sharp"
+												src="/static/images/avatar/1.jpg"
+											/>
+										</ListItemAvatar>
+										<ListItemText
+											primary={item.username}
+											secondary={
+												<React.Fragment>{item.email}</React.Fragment>
+											}
+										/>
+									</ListItem>
+								</Link>
+							);
+					  })
 					: null}
 			</List>
 		</div>
