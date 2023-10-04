@@ -97,7 +97,6 @@ const CreatePost = () => {
 
 	const [query, setQuery] = useState("idle");
 	const timerRef = useRef();
-
 	const config = axiosConfig();
 
 	useEffect(
@@ -143,7 +142,7 @@ const CreatePost = () => {
 							imageResizeTargetWidth={450}
 							imageResizeTargetHeight={450}
 							acceptedFileTypes={["image/jpeg", "image/png", "images/gif"]}
-							required={true}
+							required={false}
 						/>
 						<TextField
 							className={classes.TextField}
@@ -213,7 +212,7 @@ const CreatePost = () => {
 											Back
 										</Button>
 										<Button
-											disabled={files.length === 0 || caption === ""}
+											// disabled={files.length === 0 || caption === ""}
 											variant="contained"
 											color="primary"
 											onClick={
