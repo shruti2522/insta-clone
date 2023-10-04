@@ -1,17 +1,4 @@
-/**
- *
- * @author Anass Ferrak aka " TheLordA " <an.ferrak@gmail.com>
- * GitHub repo: https://github.com/TheLordA/Instagram-Web-App-MERN-Stack-Clone
- *
- */
 
-/**
- *  This File will Contains all Constants Used in the whole
- *  Client Code In order to make it more Cleaner
- */
-
-// This is the config used in order to send
-// our token with Axios requests
 import Cookies from "js-cookie";
 
 export const axiosConfig = () => {
@@ -23,12 +10,6 @@ export const axiosConfig = () => {
   };
 };
 
-
-/**
- * EndPoints of the API used in the code
- */
-
-// CreatePost Screen
 const url = process.env.REACT_APP_BACKEND_URL;
 
 export const CREATE_POST_URL = url+'/posts/create-post';
