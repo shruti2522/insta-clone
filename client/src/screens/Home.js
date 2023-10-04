@@ -135,17 +135,6 @@ const Home = () => {
         const response = await axios.get(ALL_POST_URL, config);
         console.log("POST DATA", response.data.data);
         setData(response.data.data);
-
-        // Fetch usernames for all user IDs in data
-        const usernamesData = {};
-        for (const item of response.data.data) {
-          const usernameResponse = await axios.get(
-            process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${item.userId}`,
-            config
-          );
-          usernamesData[item.userId] = usernameResponse.data.data.username;
-        }
-        setUsernames(usernamesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -226,17 +215,17 @@ const Home = () => {
 	// 	});
 	// };
 
-	const getUser = async (id) => {
-    try {
-      const response = await axios.get(
-        process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
-        config
-      );
-      return response.data.data.username;
-    } catch (error) {
-      console.error("Error fetching username:", error);
-    }
-  };
+// 	const getUser = async (id) => {
+//     try {
+//       const response = await axios.get(
+//         process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
+//         config
+//       );
+//       return response.data.data.username;
+//     } catch (error) {
+//       console.error("Error fetching username:", error);
+//     }
+//   };
 
 
 
@@ -252,15 +241,15 @@ const Home = () => {
 					<Card className={classes.root}>
 						<CardHeader
 							className={classes.header}
-							// avatar={
-							// 	// <Avatar>
-							// 	// 	<img
-							// 	// 		className={classes.avatar}
-							// 	// 		alt=""
-							// 	// 		src={`data:${item.photoType};base64,${item.photo}`}
-							// 	// 	/>
-							// 	// </Avatar>
-							// }
+							avatar={
+								<Avatar>
+									<img
+										className={classes.avatar}
+										alt=""
+										src={'https://images.unsplash.com/photo-1537815749002-de6a533c64db?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}
+									/>
+								</Avatar>
+							}
 							title={
 								<Link
 									className={classes.links}
@@ -270,7 +259,7 @@ const Home = () => {
 											: "/profile"
 									}
 								>
-									{item.username} <br /> {item.title}
+									{"posted by -"+item.userId} <br /> {item.title}
 									
 								</Link>
 							}
@@ -280,60 +269,37 @@ const Home = () => {
 
 						<CardMedia
 							className={classes.media}
-							image={`data:${item.image};base64,${item.image}`}
+							image='https://i.pinimg.com/564x/44/b3/81/44b38139ca8cb39f8ee346ac3c203118.jpg'
 							title={item.title}
 						/>
 
-						{/* <CardActions className={classes.likeBar} disableSpacing>
-							{item.likes.includes(state.user._id) ? (
+						<CardActions className={classes.likeBar} disableSpacing>
 								<IconButton
 									aria-label="Like"
 									color="secondary"
 									onClick={() => {
-										unlikePost(item._id);
-									}}
-								>
-									<FavoriteIcon />
-								</IconButton>
-							) : (
-								<IconButton
-									aria-label="Like"
-									onClick={() => {
-										likePost(item._id);
+										// unlikePost(item._id);
 									}}
 								>
 									<FavoriteBorderIcon />
 								</IconButton>
-							)}
 							<IconButton aria-label="comments">
 								<ChatBubbleOutlineIcon />
 							</IconButton>
-							{state.user.bookmarks.includes(item._id) ? (
-								<IconButton
+							<IconButton
 									aria-label="Remove Bookmark"
 									style={{ marginLeft: "auto", color: "#e0d011" }}
-									onClick={() => {
-										removeBookmark(item._id);
-									}}
-								>
-									<BookmarkIcon />
-								</IconButton>
-							) : (
-								<IconButton
-									aria-label="Bookmark"
-									style={{ marginLeft: "auto" }}
-									onClick={() => {
-										bookmark(item._id);
-									}}
+									// onClick={() => {
+									// 	removeBookmark(item._id);
+									// }}
 								>
 									<BookmarkBorderIcon />
 								</IconButton>
-							)}
-						</CardActions> */}
+						</CardActions>
 
 						<CardContent>
 							<Typography variant="subtitle2" display="block" gutterBottom>
-								 likes
+							
 							</Typography>
 							<Typography variant="body2" color="textSecondary" component="p">
 								{item.description}
