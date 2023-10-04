@@ -24,7 +24,11 @@ export const LOGIN_URL = url+'/auth/login';
 export const NEW_PWD_URL = `http://localhost:8000/new-pwd`;
 
 // Profile Screen
-export const MY_POST_URL = `http://localhost:8000/mypost`;
+			
+			
+export const MY_POST_URL = url+'/users/get-user-profile';
+
+
 export const MY_BOOKMARKS_URL = `http://localhost:8000/bookmarks`;
 
 // ResetPassword Screen

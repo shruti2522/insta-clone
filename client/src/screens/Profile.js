@@ -107,14 +107,12 @@ const ProfilePage = () => {
 
 	const config = axiosConfig();
 
-	console.log(state)
+	console.log("profile page state",state)
 
 	useEffect(() => {
 		axios.get(MY_POST_URL, config).then((res) => {
-			setData(res.data.posts);
-		});
-		axios.get(MY_BOOKMARKS_URL, config).then((res) => {
-			setBookmarks(res.data.bookmark);
+			console.log("profile page res",res.data.data.posts)
+			setData(res.data.data.posts);
 		});
 	}, []);
 
@@ -140,7 +138,7 @@ const ProfilePage = () => {
 							<Avatar
 								className={classes.avatar}
 								style={{ margin: "auto" }}
-								src="https://cc-media-foxit.fichub.com/image/fox-it-mondofox/e8c0f288-781d-4d0b-98ad-fd169782b53b/scene-sottacqua-per-i-sequel-di-avatar-maxw-654.jpg"
+								src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
 							/>
 						</Grid>
 						<Grid item xs={8}>
@@ -161,35 +159,6 @@ const ProfilePage = () => {
 											<Icon>settings</Icon>
 										</IconButton>
 									</div>
-								</Grid>
-							</Box>
-							<Box mb="20px">
-								<Grid container spacing={4}>
-									<Grid item>
-										<Typography variant="subtitle1">
-											<b>{data.length}</b> posts
-										</Typography>
-									</Grid>
-									<Grid item>
-										<Typography variant="subtitle1">
-											<b>
-												{state
-													? state.user.followers.length
-													: "IsLoading ..."}
-											</b>{" "}
-											followers
-										</Typography>
-									</Grid>
-									<Grid item>
-										<Typography variant="subtitle1">
-											<b>
-												{state
-													? state.user.following.length
-													: "IsLoading ..."}
-											</b>{" "}
-											following
-										</Typography>
-									</Grid>
 								</Grid>
 							</Box>
 							<Typography variant="subtitle1">Siriwat Kunaporn</Typography>
@@ -222,26 +191,25 @@ const ProfilePage = () => {
 						disabled
 					/>
 				</Tabs>
-				{/* Tabs Data Goes Here */}
-				<TabPanel value={value} index="Posts">
+				 <TabPanel value={value} index="Posts">
 					<Grid container spacing={2}>
 						{data.map((item) => (
 							<Grid item xs={4} key={item.id} className={classes.posts}>
 								<img
 									className={classes.posts_img}
 									alt="post"
-									src={`data:${item.photoType};base64,${item.photo}`}
+									src="https://i.pinimg.com/564x/44/b3/81/44b38139ca8cb39f8ee346ac3c203118.jpg"
 								/>
 							</Grid>
 						))}
 					</Grid>
 				</TabPanel>
 				<TabPanel value={value} index="Saved">
-					<GridList cellHeight={230} cols={3} spacing={15}>
+					{/* <GridList cellHeight={230} cols={3} spacing={15}>
 						{bookmarks.map((item) => (
 							<GridListTile key={item._id}>
 								<img
-									src={`data:${item.photoType};base64,${item.photo}`}
+									src=
 									alt={item.title}
 								/>
 								<GridListTileBar
@@ -258,7 +226,7 @@ const ProfilePage = () => {
 								/>
 							</GridListTile>
 						))}
-					</GridList>
+					</GridList> */}
 				</TabPanel>
 			</Box>
 			{/* EditProfile Dialog */}

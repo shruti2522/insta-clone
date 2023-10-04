@@ -150,19 +150,19 @@ const Navbar = () => {
 	const [modalStyle] = useState(getModalStyle);
 	const [openModal, setOpenModal] = useState(false);
 
-	const findUser = (pattern) => {
-		if (!(pattern === "")) {
-			const URL = `http://localhost:8000/users-research`;
-			const config = {
-				headers: {
-					Authorization: "Bearer " + Cookies.get('authToken'),
-				},
-			};
-			Axios.post(URL, { pattern }, config).then((res) => {
-				setSearch(res.data);
-			});
-		}
-	};
+	// const findUser = () => {
+	// 	if (!(pattern === "")) {
+	// 		const URL = `http://localhost:8000/users-research`;
+	// 		const config = {
+	// 			headers: {
+	// 				Authorization: "Bearer " + Cookies.get('authToken'),
+	// 			},
+	// 		};
+	// 		Axios.post(URL, { pattern }, config).then((res) => {
+	// 			setSearch(res.data);
+	// 		});
+	// 	}
+	// };
 
 	const handleOpenModal = () => {
 		handleMobileMenuClose();
@@ -285,7 +285,7 @@ const Navbar = () => {
 						input: classes.inputInput,
 					}}
 					inputProps={{ "aria-label": "search" }}
-					onChange={(e) => findUser(e.target.value)}
+					// onChange={(e) => findUser(e.target.value)}
 				/>
 			</div>
 			<List className={classes.root}>
