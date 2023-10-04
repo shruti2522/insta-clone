@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {SIGNUP_URL} from '../config/constants';
+import { SIGNUP_URL } from '../config/constants';
 
 const initialState = {
   user: null,

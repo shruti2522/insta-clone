@@ -1,8 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { SIGNUP_URL } from "../config/constants";
 import Copyright from "../components/Copyight";
 import { EmailRegex } from "../utils/regex";
 // Material-UI Components

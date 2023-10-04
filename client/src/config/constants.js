@@ -18,7 +18,7 @@ export const axiosConfig = () => {
   const token = Cookies.get('authToken');
   return {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: token,
     },
   };
 };
@@ -29,13 +29,15 @@ export const axiosConfig = () => {
  */
 
 // CreatePost Screen
-export const CREATE_POST_URL = `http://localhost:8000/createpost`;
+const url = process.env.REACT_APP_BACKEND_URL;
+
+export const CREATE_POST_URL = url+'/posts/create-post';
 
 // Home Screen
-export const ALL_POST_URL = `http://localhost:8000/allpost`;
+export const ALL_POST_URL = url+'/posts/get-feed-post';
 
 // Login Screen
-export const LOGIN_URL = `http://localhost:8000/signin`;
+export const LOGIN_URL = url+'/auth/login';
 
 // NewPassword Screen
 export const NEW_PWD_URL = `http://localhost:8000/new-pwd`;
@@ -48,7 +50,7 @@ export const MY_BOOKMARKS_URL = `http://localhost:8000/bookmarks`;
 export const RESET_PWD_URL = `http://localhost:8000/reset-pwd`;
 
 // SignUp Screen
-export const SIGNUP_URL = `http://localhost:8000/signup`;
+export const SIGNUP_URL = url+'/auth/signup';
 
 // SubscribePosts Screen
 export const SUB_POST_URL = `http://localhost:8000/subspost`;

@@ -129,8 +129,8 @@ const Home = () => {
 
 	useEffect(() => {
 		axios.get(ALL_POST_URL, config).then((res) => {
-			console.log("POST DATA", res.data.posts)
-			setData(res.data.posts);
+			console.log("POST DATA", res.data.data)
+			setData(res.data.data);
 		});
 	}, []);
 
@@ -218,37 +218,39 @@ const Home = () => {
 					<Card className={classes.root}>
 						<CardHeader
 							className={classes.header}
-							avatar={
-								<Avatar>
-									<img
-										className={classes.avatar}
-										alt=""
-										src={`data:${item.photoType};base64,${item.photo}`}
-									/>
-								</Avatar>
-							}
+							// avatar={
+							// 	// <Avatar>
+							// 	// 	<img
+							// 	// 		className={classes.avatar}
+							// 	// 		alt=""
+							// 	// 		src={`data:${item.photoType};base64,${item.photo}`}
+							// 	// 	/>
+							// 	// </Avatar>
+							// }
 							title={
 								<Link
 									className={classes.links}
 									to={
-										item.postedBy._id !== state.user._id
-											? `/profile/${item.postedBy._id}`
+										item.userId !== state.user._id
+											? `/profile/${item.userId}`
 											: "/profile"
 									}
 								>
-									{item.postedBy.username}
+									{/* {item.postedBy.username} */}
+									{item.title}
+									{/* {item.description} */}
 								</Link>
 							}
-							subheader={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+							subheader={formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
 						/>
 
 						<CardMedia
 							className={classes.media}
-							image={`data:${item.photoType};base64,${item.photo}`}
-							title="Paella dish"
+							image={`data:${item.image};base64,${item.image}`}
+							title={item.title}
 						/>
 
-						<CardActions className={classes.likeBar} disableSpacing>
+						{/* <CardActions className={classes.likeBar} disableSpacing>
 							{item.likes.includes(state.user._id) ? (
 								<IconButton
 									aria-label="Like"
@@ -293,20 +295,20 @@ const Home = () => {
 									<BookmarkBorderIcon />
 								</IconButton>
 							)}
-						</CardActions>
+						</CardActions> */}
 
 						<CardContent>
 							<Typography variant="subtitle2" display="block" gutterBottom>
-								{item.likes.length} likes
+								 likes
 							</Typography>
 							<Typography variant="body2" color="textSecondary" component="p">
-								{item.body}
+								{item.description}
 							</Typography>
 						</CardContent>
 
 						<Divider variant="middle" />
 
-						<List>
+						{/* <List>
 							{item.comments.map((cmt, index) => {
 								if (!showAllComments[item._id] && index >= 2) {
 									return null;
@@ -403,8 +405,8 @@ const Home = () => {
 								onClick={() => makeComment(comment, item._id)}
 							>
 								<SendIcon />
-							</IconButton>
-						</CardContent>
+							</IconButton> */}
+						{/* </CardContent> */}
 					</Card>
 				</div>
 			))}

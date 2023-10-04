@@ -87,7 +87,7 @@ const getSteps = () => {
 	return ["Select you image", "Tag a Friend", "Submit the post"];
 };
 
-const CreatePoste = () => {
+const CreatePost = () => {
 	const classes = useStyles();
 	const navigate = useNavigate();
 	const [files, setFiles] = useState([]);
@@ -110,22 +110,24 @@ const CreatePoste = () => {
 	const handlePostData = () => {
 		// the Index 0 means the first file , we will add in the future the support of multiple
 		// images upload , the max will be 10 images per post
-		const photoEncode = files[0].getFileEncodeBase64String();
-		const photoType = files[0].fileType;
+		const image = files[0];
+		// const photoType = files[0].fileType;
 		axios.post(
 			CREATE_POST_URL,
 			{
 				title: caption,
-				body: caption,
-				photoEncode,
-				photoType,
+				description: caption,
+				image,
+				isPrivate:false,
 			},
 			config
 		).then((rep) => {
 			if (rep.data.message) {
 				setQuery("success");
 			}
-		});
+		}).catch((err) => {
+			console.log(err)
+			});
 	};
 
 	const getStepContent = (step) => {
@@ -257,4 +259,4 @@ const CreatePoste = () => {
 	);
 };
 
-export default CreatePoste;
+export default CreatePost;

@@ -38,9 +38,9 @@ const Routing = () => {
 
 				<Route path="/login" element={<Login />} />
 
-				<Route path="/signup" component={<Signup />} />
-				<Route path="/reset" component={<Reset />} />
-				<Route path="/reset/:token" component={<NewPass />} />
+				<Route path="/signup" element={<Signup />} />
+				<Route path="/reset" element={<Reset />} />
+				<Route path="/reset/:token" element={<NewPass />} />
 				<Route exact path='/' element={<ProtectedRoute />}>
 					<Route exact path='/' element={<Home />} />
 				</Route>
