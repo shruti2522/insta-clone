@@ -123,6 +123,7 @@ const Home = () => {
 	const [showSend, setShowSend] = useState(false);
 	const [comment, setComment] = useState("");
 	const [showAllComments, setShowAllComments] = useState({});
+	const [userData, setUserData] = useState({});
 
 	// Modify your axios configuration to include the token
 	const config = axiosConfig();
@@ -206,6 +207,32 @@ const Home = () => {
 		});
 	};
 
+	const getUser = async (id) => {
+    try {
+      const response = await axios.get(
+        process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
+        config
+      );
+      return response.data.data.username;
+    } catch (error) {
+      console.error("Error fetching username:", error);
+    }
+  };
+
+	useEffect(() => {
+    const fetchUserForPosts = async () => {
+      const updatedData = await Promise.all(
+        data.map(async (item) => {
+          const username = await getUser(item.userId);
+          return { ...item, username };
+        })
+      );
+      setData(updatedData);
+    };
+
+    fetchUserForPosts();
+  }, [data]);
+
 	console.log("data", data)
 	console.log("state", state)
 
@@ -236,12 +263,12 @@ const Home = () => {
 											: "/profile"
 									}
 								>
-									{/* {item.postedBy.username} */}
-									{item.title}
-									{/* {item.description} */}
+									{item.username} <br /> {item.title}
+									
 								</Link>
 							}
 							subheader={formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
+							
 						/>
 
 						<CardMedia
