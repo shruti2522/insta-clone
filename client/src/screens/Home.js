@@ -124,88 +124,107 @@ const Home = () => {
 	const [comment, setComment] = useState("");
 	const [showAllComments, setShowAllComments] = useState({});
 	const [userData, setUserData] = useState({});
+	const [usernames, setUsernames] = useState({});
 
 	// Modify your axios configuration to include the token
 	const config = axiosConfig();
 
 	useEffect(() => {
-		axios.get(ALL_POST_URL, config).then((res) => {
-			console.log("POST DATA", res.data.data)
-			setData(res.data.data);
-		});
-	}, []);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(ALL_POST_URL, config);
+        console.log("POST DATA", response.data.data);
+        setData(response.data.data);
 
-	const likePost = (id) => {
-		axios.put(`http://localhost:8000/like`, { postId: id }, config)
-			.then((result) => {
-				const newData = data.map((item) => {
-					if (result.data._id === item._id) return result.data;
-					else return item;
-				});
-				setData(newData);
-			})
-			.catch((err) => console.log(err));
-	};
+        // Fetch usernames for all user IDs in data
+        const usernamesData = {};
+        for (const item of response.data.data) {
+          const usernameResponse = await axios.get(
+            process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${item.userId}`,
+            config
+          );
+          usernamesData[item.userId] = usernameResponse.data.data.username;
+        }
+        setUsernames(usernamesData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-	const unlikePost = (id) => {
-		axios.put(`http://localhost:8000/Unlike`, { postId: id }, config)
-			.then((res) => {
-				const newData = data.map((item) => {
-					if (res.data._id === item._id) return res.data;
-					else return item;
-				});
-				setData(newData);
-			})
-			.catch((err) => console.log(err));
-	};
+    fetchData();
+  }, []);
 
-	const bookmark = (id) => {
-		axios.put(`http://localhost:8000/bookmark-post`, { postId: id }, config)
-			.then((result) => {
-				console.log("result", result.data.bookmarks)
-				dispatch({
-					type: BOOKMARK_POST,
-					payload: { bookmarks: result.data.bookmarks },
-				});
-				localStorage.setItem("user", JSON.stringify(result.data));
-			})
-			.catch((err) => console.log(err));
-	};
+	// const likePost = (id) => {
+	// 	axios.put(`http://localhost:8000/like`, { postId: id }, config)
+	// 		.then((result) => {
+	// 			const newData = data.map((item) => {
+	// 				if (result.data._id === item._id) return result.data;
+	// 				else return item;
+	// 			});
+	// 			setData(newData);
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// };
 
-	const removeBookmark = (id) => {
-		axios.put(`http://localhost:8000/remove-bookmark`, { postId: id }, config)
-			.then((result) => {
-				dispatch({
-					type: BOOKMARK_POST,
-					payload: { bookmarks: result.data.bookmarks },
-				});
-				localStorage.setItem("user", JSON.stringify(result.data));
-			})
-			.catch((err) => console.log(err));
-	};
+	// const unlikePost = (id) => {
+	// 	axios.put(`http://localhost:8000/Unlike`, { postId: id }, config)
+	// 		.then((res) => {
+	// 			const newData = data.map((item) => {
+	// 				if (res.data._id === item._id) return res.data;
+	// 				else return item;
+	// 			});
+	// 			setData(newData);
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// };
 
-	const makeComment = (text, postId) => {
-		setComment("");
-		axios.put(`http://localhost:8000/comment`, { text, postId }, config)
-			.then((result) => {
-				const newData = data.map((item) => {
-					if (result.data._id === item._id) return result.data;
-					else return item;
-				});
-				setData(newData);
-			})
-			.catch((err) => console.log(err));
-		setComment("");
-	};
+	// const bookmark = (id) => {
+	// 	axios.put(`http://localhost:8000/bookmark-post`, { postId: id }, config)
+	// 		.then((result) => {
+	// 			console.log("result", result.data.bookmarks)
+	// 			dispatch({
+	// 				type: BOOKMARK_POST,
+	// 				payload: { bookmarks: result.data.bookmarks },
+	// 			});
+	// 			localStorage.setItem("user", JSON.stringify(result.data));
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// };
 
-	const deletePost = (postId) => {
-		axios.delete(`http://localhost:8000/deletepost/${postId}`, config).then((res) => {
-			const newData = data.filter((item) => {
-				return item._id !== res.data;
-			});
-			setData(newData);
-		});
-	};
+	// const removeBookmark = (id) => {
+	// 	axios.put(`http://localhost:8000/remove-bookmark`, { postId: id }, config)
+	// 		.then((result) => {
+	// 			dispatch({
+	// 				type: BOOKMARK_POST,
+	// 				payload: { bookmarks: result.data.bookmarks },
+	// 			});
+	// 			localStorage.setItem("user", JSON.stringify(result.data));
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// };
+
+	// const makeComment = (text, postId) => {
+	// 	setComment("");
+	// 	axios.put(`http://localhost:8000/comment`, { text, postId }, config)
+	// 		.then((result) => {
+	// 			const newData = data.map((item) => {
+	// 				if (result.data._id === item._id) return result.data;
+	// 				else return item;
+	// 			});
+	// 			setData(newData);
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// 	setComment("");
+	// };
+
+	// const deletePost = (postId) => {
+	// 	axios.delete(`http://localhost:8000/deletepost/${postId}`, config).then((res) => {
+	// 		const newData = data.filter((item) => {
+	// 			return item._id !== res.data;
+	// 		});
+	// 		setData(newData);
+	// 	});
+	// };
 
 	const getUser = async (id) => {
     try {
@@ -219,19 +238,7 @@ const Home = () => {
     }
   };
 
-	useEffect(() => {
-    const fetchUserForPosts = async () => {
-      const updatedData = await Promise.all(
-        data.map(async (item) => {
-          const username = await getUser(item.userId);
-          return { ...item, username };
-        })
-      );
-      setData(updatedData);
-    };
 
-    fetchUserForPosts();
-  }, [data]);
 
 	console.log("data", data)
 	console.log("state", state)
