@@ -161,9 +161,6 @@ const ProfilePage = () => {
 									</div>
 								</Grid>
 							</Box>
-							<Typography variant="subtitle1">Siriwat Kunaporn</Typography>
-							<Typography variant="subtitle1">Bangkok Christian College</Typography>
-							<Typography variant="subtitle1">CU intania 96.</Typography>
 						</Grid>
 					</Grid>
 				</Box>
