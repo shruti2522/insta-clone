@@ -17,6 +17,7 @@ import Icon from "@material-ui/core/Icon";
 import Avatar from "@material-ui/core/Avatar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 // General Styles
@@ -33,6 +34,24 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: "paleturquoise",
 	},
 	settings: {},
+	loaderContainer: {
+		position: "fixed",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center", 
+		zIndex: 9999,
+	},
+
+	loader: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		flexDirection: "column",
+	},
 }));
 
 function TabPanel(props) {
@@ -201,22 +220,34 @@ const UserProfilePage = () => {
 							<Grid item xs={4} className={classes.post_box}>
 								<img
 									alt="post"
-									style={{ width: "100%" }}
-									src="https://via.placeholder.com/500/f5f5f5"
+									style={{ width: "100%" , height: "70%"}}
+									src="https://source.unsplash.com/random"
 								/>
 							</Grid>
 							<Grid item xs={4} className={classes.post_box}>
 								<img
 									alt="post"
-									style={{ width: "100%" }}
-									src="https://via.placeholder.com/500/f5f5f5"
+									style={{ width: "100%", height: "70%" }}
+									src="https://source.unsplash.com/random"
+								/>
+							</Grid>
+							<Grid item xs={4} className={classes.post_box}>
+								<img
+									alt="post"
+									style={{ width: "100%", height: "70%" }}
+									src="https://source.unsplash.com/random"
 								/>
 							</Grid>
 						</Grid>
 					</TabPanel>
 				</Box>
 			) : (
-				"Is Loading ..."
+				<div className={classes.loaderContainer}>
+				 <div className={classes.loader}>
+					 <CircularProgress /> 
+
+				 </div>
+				</div>
 			)}
 		</React.Fragment>
 	);

@@ -102,6 +102,7 @@ const ProfilePage = () => {
 	const classes = useStyles();
 	const { state } = useContext(AuthenticationContext);
 	const [data, setData] = useState([]);
+	const [userData, setUserData] = useState([]);
 	const [bookmarks, setBookmarks] = useState([]);
 	const [value, setValue] = useState("Posts");
 
@@ -113,6 +114,7 @@ const ProfilePage = () => {
 		axios.get(MY_POST_URL, config).then((res) => {
 			console.log("profile page res",res.data.data.posts)
 			setData(res.data.data.posts);
+			setUserData(res.data.data);
 		});
 	}, []);
 
@@ -161,6 +163,35 @@ const ProfilePage = () => {
 									</div>
 								</Grid>
 							</Box>
+							<Box mb="20px">
+									 <Grid container spacing={4}>
+										<Grid item>
+											<Typography variant="subtitle1">
+												<b>
+													{userData.posts.length}
+												</b>{" "}
+												posts
+											</Typography>
+										</Grid>
+										<Grid item>
+											<Typography variant="subtitle1">
+												<b>
+													{userData.totalFollower}
+												</b>{" "}
+												followers
+											</Typography>
+										</Grid>
+										<Grid item>
+											<Typography variant="subtitle1">
+												<b>
+													{userData.totalFollowing}
+												</b>{" "}
+												following
+											</Typography>
+										</Grid>
+									</Grid>
+								</Box>
+								<Typography variant="h6">{`${userData.firstname} ${userData.lastname}`}</Typography>
 						</Grid>
 					</Grid>
 				</Box>

@@ -30,6 +30,8 @@ import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import { formatDistanceToNow } from "date-fns";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 
 // General style
@@ -113,6 +115,26 @@ const useStyles = makeStyles((theme) => ({
 	links: {
 		textDecoration: "none",
 	},
+
+	loaderContainer: {
+		position: "fixed",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center", // Add a semi-transparent background overlay
+		zIndex: 9999, // Ensure the loader is on top of everything
+	},
+
+	loader: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		flexDirection: "column",
+		padding: theme.spacing(2),
+	},
 }));
 
 const Home = () => {
@@ -120,11 +142,8 @@ const Home = () => {
 	const { state, dispatch } = useContext(AuthenticationContext);
 
 	const [data, setData] = useState([]);
-	const [showSend, setShowSend] = useState(false);
-	const [comment, setComment] = useState("");
-	const [showAllComments, setShowAllComments] = useState({});
-	const [userData, setUserData] = useState({});
-	const [usernames, setUsernames] = useState({});
+	const [isLoading, setIsLoading] = useState(true);
+
 	
 
 	const config = axiosConfig();
@@ -166,6 +185,8 @@ const Home = () => {
 		sessionStorage.setItem("data", JSON.stringify(userNames));
 		console.log("session cookie set")
 		setData(fetchedData);
+		setIsLoading(false);
+		
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -264,8 +285,18 @@ const Home = () => {
 
 	return (
 		<>
-			<Navbar />
-			{data.map((item) => (
+		<Navbar />
+			
+
+			{isLoading ? (
+				<div className={classes.loaderContainer}>
+				 <div className={classes.loader}>
+					 <CircularProgress /> 
+
+				 </div>
+				</div>
+     // Show loader
+    ) : (data.map((item) => (
 
 				<div className="home" key={item._id}>
 					<Card className={classes.root}>
@@ -439,7 +470,10 @@ const Home = () => {
 						{/* </CardContent> */}
 					</Card>
 				</div>
-			))}
+			
+			)))}
+
+		
 		</>
 	);
 };
