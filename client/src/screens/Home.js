@@ -125,9 +125,25 @@ const Home = () => {
 	const [showAllComments, setShowAllComments] = useState({});
 	const [userData, setUserData] = useState({});
 	const [usernames, setUsernames] = useState({});
+	
 
-	// Modify your axios configuration to include the token
 	const config = axiosConfig();
+
+	const getUser = async (id) => {
+    try {
+      const response = await axios.get(
+        process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
+        config
+      );
+	  console.log(response.data.data.username)
+       return { userId: id, username: response.data.data.username };
+    } catch (error) {
+      console.error("Error fetching username:", error);
+    }
+  };
+
+
+	// Modify your axios configuration to include the toke
 
 	useEffect(() => {
     const fetchData = async () => {
@@ -135,6 +151,18 @@ const Home = () => {
         const response = await axios.get(ALL_POST_URL, config);
         console.log("POST DATA", response.data.data);
         setData(response.data.data);
+		const fetchedData = response.data.data;
+		
+		const userNamesMap = new Map();
+
+      for (const item of fetchedData) {
+        const userObj = await getUser(item.userId);
+        userNamesMap.set(item.userId, userObj);
+      }
+
+      const userNames = [...userNamesMap.values()];
+
+      sessionStorage.setItem("data", JSON.stringify(userNames));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -142,6 +170,16 @@ const Home = () => {
 
     fetchData();
   }, []);
+
+    const storedData = sessionStorage.getItem("data");
+    const parsedData = JSON.parse(storedData);
+
+// Function to retrieve username by userId
+	const getUsernameByUserId = (userId) => {
+	const userObject = parsedData.find((user) => user.userId === userId);
+	return userObject ? userObject.username : null;
+	};
+
 
 	// const likePost = (id) => {
 	// 	axios.put(`http://localhost:8000/like`, { postId: id }, config)
@@ -215,19 +253,6 @@ const Home = () => {
 	// 	});
 	// };
 
-// 	const getUser = async (id) => {
-//     try {
-//       const response = await axios.get(
-//         process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
-//         config
-//       );
-//       return response.data.data.username;
-//     } catch (error) {
-//       console.error("Error fetching username:", error);
-//     }
-//   };
-
-
 
 	console.log("data", data)
 	console.log("state", state)
@@ -246,7 +271,7 @@ const Home = () => {
 									<img
 										className={classes.avatar}
 										alt=""
-										src={'https://images.unsplash.com/photo-1537815749002-de6a533c64db?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}
+										src={'https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg'}
 									/>
 								</Avatar>
 							}
@@ -259,7 +284,7 @@ const Home = () => {
 											: "/profile"
 									}
 								>
-									{"posted by -"+item.userId} <br /> {item.title}
+									{getUsernameByUserId(item.userId)} <br /> {item.title}
 									
 								</Link>
 							}
