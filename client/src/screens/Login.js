@@ -54,6 +54,7 @@ const Login = () => {
 
 	const navigate = useNavigate();
 	const classes = useStyles();
+	const [data, setData]=useState({});
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [formatValidation, setFormatValidation] = useState(false);
@@ -84,14 +85,15 @@ const Login = () => {
 			}),
 		});
 
-		// if (!response.ok) {
-		// 	const errorData = await response.json();
-		// 	throw new Error(errorData.message);
-		// }
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(errorData.message);
+		}
 
 		const responseData = await response.json();
 		console.log("responseData:", responseData);
 		const token = responseData.data.token;
+		setData(responseData.data)
 
 		Cookies.set('authToken', token, { expires: 7 });
 
@@ -116,6 +118,7 @@ const Login = () => {
   useEffect(() => {
     const authToken = Cookies.get('authToken');
     if (authToken) {
+	  dispatch({ type: FETCH_USER_DATA, payload: data });
       setTimeout(() => {
         navigate("/");
       }, 1000);
