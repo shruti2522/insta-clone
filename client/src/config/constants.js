@@ -9,6 +9,12 @@ export const axiosConfig = () => {
     },
   };
 };
+const user = [];
+
+export const storeUserData = (responseData) => {
+  user.push(responseData);
+  
+};
 
 const url = process.env.REACT_APP_BACKEND_URL;
 
