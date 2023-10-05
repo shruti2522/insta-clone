@@ -186,7 +186,7 @@ const Navbar = () => {
 	};
 
 	const handleLogOut = () => {
-		localStorage.clear();
+		Cookies.remove('authToken');
 		dispatch({ type: LOGOUT });
 		navigate("/login");
 	};

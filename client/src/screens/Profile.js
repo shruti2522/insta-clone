@@ -178,7 +178,7 @@ const ProfilePage = () => {
                   <Box clone mb="20px">
                     <Grid container alignItems="center">
                       <Typography variant="h5">
-                        {state ? state.user.username : "IsLoading ..."}
+                        {userData.username}
                       </Typography>
                       <Button
                         className={classes.editButton}
