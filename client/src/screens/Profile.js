@@ -168,7 +168,7 @@ const ProfilePage = () => {
 										<Grid item>
 											<Typography variant="subtitle1">
 												<b>
-													{userData.posts.length}
+													{data.length}
 												</b>{" "}
 												posts
 											</Typography>
