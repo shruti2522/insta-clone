@@ -1,5 +1,5 @@
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { FETCH_USER_DATA } from "../contexts/types.js";
@@ -70,48 +70,58 @@ const Login = () => {
 	};
 
 	const handleLogin = async () => {
-		if (EmailRegex.test(email)) {
-			try {
-				const response = await fetch(LOGIN_URL, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						email,
-						password
-					}),
-				});
+		console.log("entered login route")
+	if (EmailRegex.test(email)) {
+		try {
+		const response = await fetch(LOGIN_URL, {
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+			email,
+			password,
+			}),
+		});
 
-				if (!response.ok) {
-					const errorData = await response.json();
-					throw new Error(errorData.message);
-				}
+		// if (!response.ok) {
+		// 	const errorData = await response.json();
+		// 	throw new Error(errorData.message);
+		// }
 
-				const responseData = await response.json();
-				const token = responseData.data.token;
+		const responseData = await response.json();
+		console.log("responseData:", responseData);
+		const token = responseData.data.token;
 
-				Cookies.set('authToken', token, { expires: 7 });
-				dispatch({ type: FETCH_USER_DATA, payload: responseData.data });
-				console.log("payload", responseData.data)
-				navigate("/");
+		Cookies.set('authToken', token, { expires: 7 });
 
-				console.log(responseData.message);
-				console.log(responseData)
-				return responseData;
-			} catch (error) {
-				console.error("Error during sign up:", error);
-				if (error.response) {
-					console.error("Response status:", error.response.status);
-					console.error("Response data:", error.response.data);
-				}
-				throw error;
-			}
-		} else {
-			setAuthValidation(false);
-			setFormatValidation(true);
+		// Dispatch the action after setting the cookie
+		dispatch({ type: FETCH_USER_DATA, payload: responseData.data });
+
+		navigate("/");
+		} catch (error) {
+		console.error("Error during sign up:", error);
+		if (error.response) {
+			console.error("Response status:", error.response.status);
+			console.error("Response data:", error.response.data);
 		}
+		}
+	} else {
+		setAuthValidation(false);
+		setFormatValidation(true);
 	}
+}
+
+
+  useEffect(() => {
+    const authToken = Cookies.get('authToken');
+    if (authToken) {
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+  }, []);
+
 
 	return (
 		<Grid container>
