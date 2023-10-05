@@ -129,9 +129,9 @@ const Home = () => {
 
 	const config = axiosConfig();
 
-	const getUser = async (id) => {
+	const getUser =  async (id) => {
     try {
-      const response = await axios.get(
+      const response =  await axios.get(
         process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
         config
       );
@@ -150,23 +150,28 @@ const Home = () => {
       try {
         const response = await axios.get(ALL_POST_URL, config);
         console.log("POST DATA", response.data.data);
-        setData(response.data.data);
+
 		const fetchedData = response.data.data;
-		
+
 		const userNamesMap = new Map();
 
-      for (const item of fetchedData) {
-        const userObj = await getUser(item.userId);
-        userNamesMap.set(item.userId, userObj);
-      }
+		
+		for (const item of fetchedData) {
+			const userObj = await getUser(item.userId);
+			userNamesMap.set(item.userId, userObj);
+		}
 
-      const userNames = [...userNamesMap.values()];
+		const userNames = [...userNamesMap.values()];
 
-      sessionStorage.setItem("data", JSON.stringify(userNames));
+		sessionStorage.setItem("data", JSON.stringify(userNames));
+		console.log("session cookie set")
+		setData(fetchedData);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+	
 
     fetchData();
   }, []);

@@ -36,6 +36,9 @@ import NotificationsActiveOutlinedIcon from "@material-ui/icons/NotificationsAct
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import Cookies from "js-cookie";
+import { axiosConfig } from "../config/constants";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -140,6 +143,7 @@ const Navbar = () => {
 	const { state, dispatch } = useContext(AuthenticationContext);
 	const navigate = useNavigate();
 	const [search, setSearch] = useState([]);
+	const [searchValue,setSearchValue] = useState("");
 
 	// Material-Ui
 	const classes = useStyles();
@@ -150,19 +154,19 @@ const Navbar = () => {
 	const [modalStyle] = useState(getModalStyle);
 	const [openModal, setOpenModal] = useState(false);
 
-	// const findUser = () => {
-	// 	if (!(pattern === "")) {
-	// 		const URL = `http://localhost:8000/users-research`;
-	// 		const config = {
-	// 			headers: {
-	// 				Authorization: "Bearer " + Cookies.get('authToken'),
-	// 			},
-	// 		};
-	// 		Axios.post(URL, { pattern }, config).then((res) => {
-	// 			setSearch(res.data);
-	// 		});
-	// 	}
-	// };
+	const handleKeyPress = (e) => {
+		if (e.key === "Enter") {
+		// User pressed Enter, construct the profile URL and navigate to it
+		if (searchValue) {
+			searchUser(searchValue);
+			navigate(`/profile/${searchValue}`);
+			
+		}
+		}
+	};
+
+
+	const config = axiosConfig();
 
 	const handleOpenModal = () => {
 		handleMobileMenuClose();
@@ -186,6 +190,28 @@ const Navbar = () => {
 		dispatch({ type: LOGOUT });
 		navigate("/login");
 	};
+
+	const storedData = sessionStorage.getItem("data");
+	const parsedData = JSON.parse(storedData);
+	console.log("parsedData", parsedData)
+
+	const searchUser = async (username) => {
+		const userObject = parsedData.find((user) => user.username === username);
+		console.log("userObject", userObject)
+	    const userId = userObject ? userObject.userId : null;
+
+		localStorage.setItem("searchId", userId);
+
+		const userProfileUrl = `${process.env.REACT_APP_BACKEND_URL}/users/show-user-profile?userId=${userId}`;
+		
+		const response = await axios.get(userProfileUrl, config);
+		console.log("search", response.data.data);
+		setSearch(response.data.data);
+		
+		return response.data.data;
+	};
+    
+	const id = useParams();
 
 	const mobileMenuId = "primary-search-account-menu-mobile";
 	const renderMobileMenu = (
@@ -285,7 +311,10 @@ const Navbar = () => {
 						input: classes.inputInput,
 					}}
 					inputProps={{ "aria-label": "search" }}
-					// onChange={(e) => findUser(e.target.value)}
+					value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+					onKeyPress={handleKeyPress}
+					
 				/>
 			</div>
 			<List className={classes.root}>
@@ -294,9 +323,9 @@ const Navbar = () => {
 							return (
 								<Link
 									className={classes.links}
-									key={item._id}
-									to={item._id !== state.user._id ? `/profile/${item._id}` : "/profile"}
-									onClick={handleCloseModal}
+									// key={userId}
+									// to={userId !== state.user._id ? `/profile/${item._id}` : "/profile"}
+									// onClick={handleCloseModal}
 								>
 									<Divider
 										variant="inset"
@@ -312,9 +341,9 @@ const Navbar = () => {
 										</ListItemAvatar>
 										<ListItemText
 											primary={item.username}
-											secondary={
-												<React.Fragment>{item.email}</React.Fragment>
-											}
+											// secondary={
+											// 	<React.Fragment>{item.email}</React.Fragment>
+											// }
 										/>
 									</ListItem>
 								</Link>

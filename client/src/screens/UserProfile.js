@@ -18,6 +18,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
+
 // General Styles
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -47,61 +48,62 @@ const UserProfilePage = () => {
 	const classes = useStyles();
 	const [value, setValue] = useState("Posts"); // to switch between different tabs
 	const { state, dispatch } = useContext(AuthenticationContext);
-	console.log('user profile state here', state)
+	console.log('user profile state here', state);
+
+	const userId = localStorage.getItem("searchId");
 
 
-	const { userid } = useParams();
 	const [data, setData] = useState(null);
-	const [showFollow, setShowFollow] = useState(state.user ? !state.user.following.includes(userid) : null);
+	// const [showFollow, setShowFollow] = useState(state.user ? !state.user.following.includes(userid) : null);
 
 	const config = axiosConfig();
 
 	useEffect(() => {
-		axios.get(`http://localhost:8000/user/${userid}`, config).then((res) => {
-			setData(res.data);
+		axios.get( process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${userId}`, config).then((res) => {
+			setData(res.data.data);
 		});
 	}, []);
 
-	const followUser = () => {
-		axios.put(`http://localhost:8000/follow`, { followId: userid }, config).then((result) => {
-			dispatch({
-				type: UPDATE_FOLLOW_DATA,
-				payload: { followers: result.data.followers, following: result.data.following },
-			});
-			localStorage.setItem("user", JSON.stringify(result.data));
-			setData((prevState) => {
-				return {
-					...prevState,
-					user: {
-						...prevState.user,
-						followers: [...prevState.user.followers, result.data._id],
-					},
-				};
-			});
-			setShowFollow(false);
-		});
-	};
+	// const followUser = () => {
+	// 	axios.put(`http://localhost:8000/follow`, { followId: userid }, config).then((result) => {
+	// 		dispatch({
+	// 			type: UPDATE_FOLLOW_DATA,
+	// 			payload: { followers: result.data.followers, following: result.data.following },
+	// 		});
+	// 		localStorage.setItem("user", JSON.stringify(result.data));
+	// 		setData((prevState) => {
+	// 			return {
+	// 				...prevState,
+	// 				user: {
+	// 					...prevState.user,
+	// 					followers: [...prevState.user.followers, result.data._id],
+	// 				},
+	// 			};
+	// 		});
+	// 		setShowFollow(false);
+	// 	});
+	// };
 
-	const unfollowUser = () => {
-		axios.put(`http://localhost:8000/unfollow`, { unfollowId: userid }, config).then((result) => {
-			dispatch({
-				type: UPDATE_FOLLOW_DATA,
-				payload: { followers: result.data.followers, following: result.data.following },
-			});
-			localStorage.setItem("user", JSON.stringify(result.data));
-			setData((prevState) => {
-				const newFollower = prevState.user.followers.filter((item) => item !== result.data._id);
-				return {
-					...prevState,
-					user: {
-						...prevState.user,
-						followers: newFollower,
-					},
-				};
-			});
-			setShowFollow(true);
-		});
-	};
+	// const unfollowUser = () => {
+	// 	axios.put(`http://localhost:8000/unfollow`, { unfollowId: userid }, config).then((result) => {
+	// 		dispatch({
+	// 			type: UPDATE_FOLLOW_DATA,
+	// 			payload: { followers: result.data.followers, following: result.data.following },
+	// 		});
+	// 		localStorage.setItem("user", JSON.stringify(result.data));
+	// 		setData((prevState) => {
+	// 			const newFollower = prevState.user.followers.filter((item) => item !== result.data._id);
+	// 			return {
+	// 				...prevState,
+	// 				user: {
+	// 					...prevState.user,
+	// 					followers: newFollower,
+	// 				},
+	// 			};
+	// 		});
+	// 		setShowFollow(true);
+	// 	});
+	// };
 
 	console.log("user data", data);
 
@@ -116,32 +118,24 @@ const UserProfilePage = () => {
 								<Avatar
 									className={classes.avatar}
 									style={{ margin: "auto" }}
-									src="https://cc-media-foxit.fichub.com/image/fox-it-mondofox/e8c0f288-781d-4d0b-98ad-fd169782b53b/scene-sottacqua-per-i-sequel-di-avatar-maxw-654.jpg"
+									src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
 								/>
 							</Grid>
 							<Grid item xs={8}>
 								<Box clone mb="20px">
 									<Grid container alignItems="center">
 										<Typography variant="h5">
-											{data.user ? data.user.Name : "Is Loading ..."}
+											{data ? data.username : "Is Loading ..."}
 										</Typography>
-										{showFollow ? (
+										
 											<Button
 												className={classes.editButton}
 												variant="outlined"
-												onClick={() => followUser()}
+												// onClick={() => followUser()}
 											>
 												Follow
 											</Button>
-										) : (
-											<Button
-												className={classes.editButton}
-												variant="outlined"
-												onClick={() => unfollowUser()}
-											>
-												UnFollow
-											</Button>
-										)}
+										
 
 										<div className={classes.settings}>
 											<IconButton component={Link} to="#">
@@ -151,23 +145,11 @@ const UserProfilePage = () => {
 									</Grid>
 								</Box>
 								<Box mb="20px">
-									<Grid container spacing={4}>
+									 <Grid container spacing={4}>
 										<Grid item>
 											<Typography variant="subtitle1">
 												<b>
-													{data.posts
-														? data.posts.length
-														: "IsLoading..."}
-												</b>{" "}
-												posts
-											</Typography>
-										</Grid>
-										<Grid item>
-											<Typography variant="subtitle1">
-												<b>
-													{data.user
-														? data.user.followers.length
-														: "IsLoading..."}
+													{ data.totalFollower}
 												</b>{" "}
 												followers
 											</Typography>
@@ -175,18 +157,14 @@ const UserProfilePage = () => {
 										<Grid item>
 											<Typography variant="subtitle1">
 												<b>
-													{data.user
-														? data.user.following.length
-														: "IsLoading..."}
+													{data.totalFollowing}
 												</b>{" "}
 												following
 											</Typography>
 										</Grid>
 									</Grid>
 								</Box>
-								<Typography variant="subtitle1">Siriwat Kunaporn</Typography>
-								<Typography variant="subtitle1">Bangkok Christian College</Typography>
-								<Typography variant="subtitle1">CU intania 96.</Typography>
+								<Typography variant="h6">{`${data.firstname} ${data.lastname}`}</Typography>
 							</Grid>
 						</Grid>
 					</Box>
@@ -211,17 +189,14 @@ const UserProfilePage = () => {
 					</Tabs>
 					<TabPanel value={value} index="Posts">
 						<Grid container spacing={2}>
-							{data.posts
-								? data.posts.map((item) => (
+{/* 						 
 									<Grid item xs={4} key={item.id}>
 										<img
 											alt="post"
 											style={{ width: "100%", height: "100%" }}
-											src={`data:${item.PhotoType};base64,${item.Photo}`}
+											src=
 										/>
-									</Grid>
-								))
-								: "Is Loading ..."}
+									</Grid> */}
 
 							<Grid item xs={4} className={classes.post_box}>
 								<img
