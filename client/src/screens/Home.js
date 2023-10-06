@@ -1,6 +1,5 @@
 
 //Home 
-
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -340,7 +339,7 @@ const Home = () => {
 
                         <CardMedia
                             className={classes.media}
-                            image='https://i.pinimg.com/564x/44/b3/81/44b38139ca8cb39f8ee346ac3c203118.jpg'
+                            image={`https://res.cloudinary.com/piyushproj/image/upload/v1696626899/${item._id}.png`}
                             title={item.title}
                         />
 

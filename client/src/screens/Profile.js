@@ -130,13 +130,13 @@ const ProfilePage = () => {
 	const config = axiosConfig();
 
 	console.log("profile page state",state)
-
 	useEffect(() => {
 		axios.get(MY_POST_URL, config).then((res) => {
 			console.log("profile page res",res.data.data.posts)
 			setData(res.data.data.posts);
 			setUserData(res.data.data);
 			setIsLoading(false);
+      sessionStorage.setItem("profile", JSON.stringify(res.data.data));
 		});
 	}, []);
 

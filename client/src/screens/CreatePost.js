@@ -1,5 +1,4 @@
 // create post 
-
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -84,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
 const getSteps = () => {
     return ["Select you image", "Tag a Friend", "Submit the post"];
 };
@@ -95,35 +95,62 @@ const CreatePost = () => {
     const [caption, setCaption] = useState("");
     const [activeStep, setActiveStep] = useState(0);
     const steps = getSteps();
+	const [pic, setPic] = useState();
+	const [picLoading, setPicLoading] = useState(false);
 
     const [query, setQuery] = useState("idle");
     const timerRef = useRef();
     const config = axiosConfig();
-
+	const addImg=(pics,id)=>{
+		if (pics.type === "image/jpeg" || pics.type === "image/png") {
+			const data = new FormData();
+			data.append("file", pics);
+			data.append("upload_preset", "chat-app");
+			data.append("cloud_name", "piyushproj");
+            data.append("public_id",id);
+			fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
+			  method: "post",
+			  body: data,
+			})
+			  .then((res) => res.json())
+			  .then((data) => {
+				setPic(data.url.toString());
+				console.log(data.url.toString());
+				setPicLoading(false);
+			  })
+			  .catch((err) => {
+				console.log(err);
+				setPicLoading(false);
+			  });
+		  }
+	}
     useEffect(
         () => () => {
             clearTimeout(timerRef.current);
         },
         []
     );
-
+	
     const handlePostData = () => {
         // the Index 0 means the first file , we will add in the future the support of multiple
         // images upload , the max will be 10 images per post
         const image = files[0];
         // const photoType = files[0].fileType;
+       
         axios.post(
             CREATE_POST_URL,
             {
                 title: caption,
                 description: caption,
-                image,
+                // image,
                 isPrivate:false,
             },
             config
         ).then((rep) => {
             if (rep.data.message) {
                 setQuery("success");
+                console.log(rep.data.data._id)
+                addImg(image.file,rep.data.data._id);
 				 sessionStorage.removeItem("posts");
             }
         }).catch((err) => {
