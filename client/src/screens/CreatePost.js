@@ -124,12 +124,14 @@ const CreatePost = () => {
         ).then((rep) => {
             if (rep.data.message) {
                 setQuery("success");
+				 sessionStorage.removeItem("posts");
             }
         }).catch((err) => {
             console.log(err)
             });
+			 
     };
-    sessionStorage.removeItem("posts");
+  
     const getStepContent = (step) => {
         switch (step) {
             case 0:
@@ -191,6 +193,7 @@ const CreatePost = () => {
         handleNext();
         handleClickQuery();
         handlePostData();
+
     };
 
     return (
