@@ -1,4 +1,7 @@
 
+
+//Navbar
+
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
@@ -143,7 +146,7 @@ const Navbar = () => {
 	const { state, dispatch } = useContext(AuthenticationContext);
 	const navigate = useNavigate();
 	const [search, setSearch] = useState([]);
-	const [searchValue,setSearchValue] = useState("");
+	const [searchValue, setSearchValue] = useState("");
 
 	// Material-Ui
 	const classes = useStyles();
@@ -156,12 +159,12 @@ const Navbar = () => {
 
 	const handleKeyPress = (e) => {
 		if (e.key === "Enter") {
-		// User pressed Enter, construct the profile URL and navigate to it
-		if (searchValue) {
-			searchUser(searchValue);
-			navigate(`/profile/${searchValue}`);
-			
-		}
+			// User pressed Enter, construct the profile URL and navigate to it
+			if (searchValue) {
+				searchUser(searchValue);
+				navigate(`/profile/${searchValue}`);
+
+			}
 		}
 	};
 
@@ -198,19 +201,19 @@ const Navbar = () => {
 	const searchUser = async (username) => {
 		const userObject = parsedData.find((user) => user.username === username);
 		console.log("userObject", userObject)
-	    const userId = userObject ? userObject.userId : null;
+		const userId = userObject ? userObject.userId : null;
 
 		localStorage.setItem("searchId", userId);
 
 		const userProfileUrl = `${process.env.REACT_APP_BACKEND_URL}/users/show-user-profile?userId=${userId}`;
-		
+
 		const response = await axios.get(userProfileUrl, config);
 		console.log("search", response.data.data);
 		setSearch(response.data.data);
-		
+
 		return response.data.data;
 	};
-    
+
 	const id = useParams();
 
 	const mobileMenuId = "primary-search-account-menu-mobile";
@@ -250,20 +253,21 @@ const Navbar = () => {
 				</IconButton>
 				<p>Add Post</p>
 			</MenuItem>
-			<MenuItem component={Link} to="#">
-				<IconButton>
-					<Badge
-						badgeContent={4}
-						color="secondary"
-						style={{
-							"color": "rgba(0, 0, 0, 0.54)",
-						}}
-					>
-						<AllInboxOutlinedIcon />
-					</Badge>
-				</IconButton>
-				<p>Messages</p>
-			</MenuItem>
+			{/*<MenuItem component={Link} to="#">
+                <IconButton>
+                    <Badge
+                        badgeContent={4}
+                        color="secondary"
+                        style={{
+                            "color": "rgba(0, 0, 0, 0.54)",
+                        }}
+                    >
+                        <AllInboxOutlinedIcon />
+                    </Badge>
+                </IconButton>
+                <p>Messages</p>
+            </MenuItem>
+            */}
 			<MenuItem component={Link} to="#">
 				<IconButton>
 					<Badge badgeContent={6} color="secondary">
@@ -312,43 +316,43 @@ const Navbar = () => {
 					}}
 					inputProps={{ "aria-label": "search" }}
 					value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+					onChange={(e) => setSearchValue(e.target.value)}
 					onKeyPress={handleKeyPress}
-					
+
 				/>
 			</div>
 			<List className={classes.root}>
 				{search.user
 					? search.user.map((item) => {
-							return (
-								<Link
-									className={classes.links}
-									// key={userId}
-									// to={userId !== state.user._id ? `/profile/${item._id}` : "/profile"}
-									// onClick={handleCloseModal}
-								>
-									<Divider
-										variant="inset"
-										component="li"
-										style={{ marginLeft: "0px" }}
-									/>
-									<ListItem alignItems="flex-start">
-										<ListItemAvatar>
-											<Avatar
-												alt="Remy Sharp"
-												src="/static/images/avatar/1.jpg"
-											/>
-										</ListItemAvatar>
-										<ListItemText
-											primary={item.username}
-											// secondary={
-											// 	<React.Fragment>{item.email}</React.Fragment>
-											// }
+						return (
+							<Link
+								className={classes.links}
+							// key={userId}
+							// to={userId !== state.user._id ? `/profile/${item._id}` : "/profile"}
+							// onClick={handleCloseModal}
+							>
+								<Divider
+									variant="inset"
+									component="li"
+									style={{ marginLeft: "0px" }}
+								/>
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar
+											alt="Remy Sharp"
+											src="/static/images/avatar/1.jpg"
 										/>
-									</ListItem>
-								</Link>
-							);
-					  })
+									</ListItemAvatar>
+									<ListItemText
+										primary={item.username}
+									// secondary={
+									//  <React.Fragment>{item.email}</React.Fragment>
+									// }
+									/>
+								</ListItem>
+							</Link>
+						);
+					})
 					: null}
 			</List>
 		</div>
@@ -421,24 +425,24 @@ const Navbar = () => {
 										/>
 									}
 								/>
-								<BottomNavigationAction
-									label="Messages"
-									value="messages"
-									component={Link}
-									to="/messages"
-									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
-									icon={
-										<Badge
-											badgeContent={4}
-											color="secondary"
-											style={{
-												"color": "rgba(0, 0, 0, 0.54)",
-											}}
-										>
-											<AllInboxOutlinedIcon />
-										</Badge>
-									}
-								/>
+								{/* <BottomNavigationAction
+                                    label="Messages"
+                                    value="messages"
+                                    component={Link}
+                                    to="/messages"
+                                    style={{ "color": "rgba(0, 0, 0, 0.54)" }}
+                                    icon={
+                                        <Badge
+                                            badgeContent={4}
+                                            color="secondary"
+                                            style={{
+                                                "color": "rgba(0, 0, 0, 0.54)",
+                                            }}
+                                        >
+                                            <AllInboxOutlinedIcon />
+                                        </Badge>
+                                    }
+                                /> */}
 								<BottomNavigationAction
 									label="Notifications"
 									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
