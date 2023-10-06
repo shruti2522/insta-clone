@@ -95,7 +95,7 @@ const Login = () => {
 		const token = responseData.data.token;
 		setData(responseData.data)
 
-		Cookies.set('authToken', token, { expires: 7 });
+		Cookies.set('authToken', token, { expires: 1/24 });
 
 		// Dispatch the action after setting the cookie
 		dispatch({ type: FETCH_USER_DATA, payload: responseData.data });
