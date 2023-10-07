@@ -152,6 +152,10 @@ const CreatePost = () => {
                 console.log(rep.data.data._id)
                 addImg(image.file,rep.data.data._id);
 				 sessionStorage.removeItem("posts");
+                 const profiles = sessionStorage.getItem("profile");
+				if (profiles) {
+					sessionStorage.removeItem("profile");
+				}
             }
         }).catch((err) => {
             console.log(err)
