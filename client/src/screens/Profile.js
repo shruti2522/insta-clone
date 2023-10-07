@@ -118,6 +118,20 @@ const TabPanel = (props) => {
 };
 
 const ProfilePage = () => {
+  const config = axiosConfig();
+
+  const getUser = async (id) => {
+    try {
+      const response = await axios.get(
+        process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
+        config
+      );
+      console.log(response.data.data.username)
+      return { userId: id, username: response.data.data.username };
+    } catch (error) {
+      console.error("Error fetching username:", error);
+    }
+  };
   const classes = useStyles();
   const { state } = useContext(AuthenticationContext);
   const [data, setData] = useState([]);
@@ -129,17 +143,16 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const link = "https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg";
-  const config = axiosConfig();
 
   console.log("profile page state", state)
-
   useEffect(() => {
-    const followerss=JSON.parse(sessionStorage.getItem("followers"));
-    if(followerss){
-      console.log("profile page followerss",followerss)
+    const followerss = JSON.parse(sessionStorage.getItem("followers"));
+    if (followerss) {
+      console.log("profile page followerss", followerss)
       setFollowers(JSON.parse(sessionStorage.getItem("followers")));
+     
     }
-    console.log(followers,"followers")
+    // console.log(followers, "followers")
     // console.log(JSON.parse(sessionStorage.getItem("followers")),"followerrss")
     const profies = JSON.parse(sessionStorage.getItem("profile"));
     if (profies) {
@@ -160,6 +173,17 @@ const ProfilePage = () => {
         sessionStorage.setItem("profile", JSON.stringify(res.data.data));
       });
     }
+    const userNames=new Map();
+    const getFollowers = async () => {
+      const followers = await Promise.all(
+        profies.follower.map((follower) => getUser(follower.followingId))
+      );
+      console.log("profile page followers", followers)
+      setFollowers(followers);
+      sessionStorage.setItem("followers", JSON.stringify(followers));
+    };
+    getFollowers();
+
 
   }, []);
 
@@ -237,37 +261,50 @@ const ProfilePage = () => {
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: '#fff', width: '50%', height: '50%', overflow: 'scroll' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid #dbdbdb' }}>
                             <h3>Followers</h3>
+                            <h4>
+                              {console.log(followers, "followers")}
+                            </h4>
+
                             <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }}
                               onClick={() => setShowFollowers(false)}
                             >
                               <Icon>close</Icon>
                             </button>
-{followers.map((item) => (
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid #dbdbdb' }}>
-                              <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Avatar
-                                  className={classes.avatar}
-                                  style={{ margin: "auto", width: '30px', height: '30px' }}
-                                  src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
-                                />
-                                <div style={{ marginLeft: '10px' }}>
-                                  <h4>{item._id}</h4>
-                                  <p>{item.email}</p>
+                            <br />
+
+                            {followers.map((item) => (
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', borderBottom: '1px solid #dbdbdb' }}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <Avatar
+                                    className={classes.avatar}
+                                    style={{ margin: "auto", width: '30px', height: '30px' }}
+                                    src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
+                                  />
+                                  <div style={{ marginLeft: '10px' }}>
+                                    <h4>
+                                      {
+                                        item.username
+                                        
+
+                                      }
+                                    </h4>
+
+                                    {/* <p>{item.email}</p> */}
+                                  </div>
                                 </div>
+                                <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }}
+                                >
+                                  <Icon>check</Icon>
+                                </button>
                               </div>
-                              <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }}
-                              >
-                                <Icon>check</Icon>
-                              </button>
-                            </div>
-                          ))
+                            ))
 
-  }
+                            }
                           </div>
-                          </div>
-                        </div>}
+                        </div>
+                      </div>}
 
-                      
+
                       <Grid item>
                         <Typography variant="subtitle1">
                           <b>{userData.totalFollowing}</b> following
