@@ -126,18 +126,30 @@ const ProfilePage = () => {
 	const [value, setValue] = useState("Posts");
 	const [isLoading, setIsLoading] = useState(true);
 
-
+const link="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg";
 	const config = axiosConfig();
 
 	console.log("profile page state",state)
+  
 	useEffect(() => {
-		axios.get(MY_POST_URL, config).then((res) => {
+    const profies=JSON.parse(sessionStorage.getItem("profile"));
+  if(profies){
+    console.log("profile page profies",profies)
+    setData(profies.posts);
+    setUserData(profies);
+    setIsLoading(false);
+  }
+  else{
+    axios.get(MY_POST_URL, config).then((res) => {
 			console.log("profile page res",res.data.data.posts)
 			setData(res.data.data.posts);
 			setUserData(res.data.data);
+      console.log(res.data.data.posts);
 			setIsLoading(false);
       sessionStorage.setItem("profile", JSON.stringify(res.data.data));
 		});
+  }
+	
 	}, []);
 
 	//Toggle the EditProfile Button to show the Dialog
@@ -248,7 +260,11 @@ const ProfilePage = () => {
                     <img
                       className={classes.posts_img}
                       alt="post"
-                      src="https://i.pinimg.com/564x/44/b3/81/44b38139ca8cb39f8ee346ac3c203118.jpg"
+                     src={`https://res.cloudinary.com/piyushproj/image/upload/v1696626899/${item._id}.png`} 
+                     onError={(e)=>{e.target.onerror = null; e.target.src=link}}
+                     onClick={((e)=>{
+                      console.log(item._id)
+                     })}
                     />
                   </Grid>
                 ))}

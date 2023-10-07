@@ -19,6 +19,7 @@ import Container from "@material-ui/core/Container";
 import Alert from "@material-ui/lab/Alert";
 import { useDispatch } from 'react-redux';
 import Cookies from "js-cookie";
+import { ca } from "date-fns/locale";
 
 // General Styles
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +55,7 @@ const Login = () => {
 
 	const navigate = useNavigate();
 	const classes = useStyles();
-	const [data, setData]=useState({});
+	const [data, setData] = useState({});
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [formatValidation, setFormatValidation] = useState(false);
@@ -69,61 +70,64 @@ const Login = () => {
 			setPassword(value);
 		}
 	};
-
 	const handleLogin = async () => {
 		console.log("entered login route")
-	if (EmailRegex.test(email)) {
-		try {
-		const response = await fetch(LOGIN_URL, {
-			method: 'POST',
-			headers: {
-			'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-			email,
-			password,
-			}),
-		});
+		if (EmailRegex.test(email)) {
+			try {
+				const response = await fetch(LOGIN_URL, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						email,
+						password,
+					}),
+				});
 
-		if (!response.ok) {
-			const errorData = await response.json();
-			throw new Error(errorData.message);
+				if (!response.ok) {
+					const errorData = await response.json();
+					throw new Error(errorData.message);
+				}
+
+				const responseData = await response.json();
+				console.log("responseData:", responseData);
+				const token = responseData.data.token;
+				setData(responseData.data)
+				const profiles = sessionStorage.getItem("profile");
+				if (profiles) {
+					sessionStorage.removeItem("profile");
+				}
+
+				Cookies.set('authToken', token, { expires: 1 / 24 });
+
+				// Dispatch the action after setting the cookie
+				dispatch({ type: FETCH_USER_DATA, payload: responseData.data });
+
+				navigate("/");
+			} catch (error) {
+				console.error("Error during sign up:", error);
+				if (error.response) {
+					console.error("Response status:", error.response.status);
+					console.error("Response data:", error.response.data);
+				}
+			}
+		} else {
+			setAuthValidation(false);
+			setFormatValidation(true);
 		}
-
-		const responseData = await response.json();
-		console.log("responseData:", responseData);
-		const token = responseData.data.token;
-		setData(responseData.data)
-
-		Cookies.set('authToken', token, { expires: 1/24 });
-
-		// Dispatch the action after setting the cookie
-		dispatch({ type: FETCH_USER_DATA, payload: responseData.data });
-
-		navigate("/");
-		} catch (error) {
-		console.error("Error during sign up:", error);
-		if (error.response) {
-			console.error("Response status:", error.response.status);
-			console.error("Response data:", error.response.data);
-		}
-		}
-	} else {
-		setAuthValidation(false);
-		setFormatValidation(true);
 	}
-}
 
 
-  useEffect(() => {
-    const authToken = Cookies.get('authToken');
-    if (authToken) {
-	  dispatch({ type: FETCH_USER_DATA, payload: data });
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
-    }
-  }, []);
+	useEffect(() => {
+		const authToken = Cookies.get('authToken');
+		if (authToken) {
+			dispatch({ type: FETCH_USER_DATA, payload: data });
+			setTimeout(() => {
+				navigate("/");
+			}, 1000);
+		}
+	}, []);
 
 
 	return (
