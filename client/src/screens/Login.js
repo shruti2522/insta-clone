@@ -61,6 +61,7 @@ const Login = () => {
 	const [formatValidation, setFormatValidation] = useState(false);
 	const [authValidation, setAuthValidation] = useState(false);
 	const { dispatch } = useContext(AuthenticationContext);
+	const [id, setId] = useState("");
 
 	const handleInputChanges = (e) => {
 		const { name, value } = e.target;
@@ -92,8 +93,11 @@ const Login = () => {
 
 				const responseData = await response.json();
 				console.log("responseData:", responseData);
+				setId(responseData.data._id);
+				
 				const token = responseData.data.token;
 				setData(responseData.data)
+
 				const profiles = sessionStorage.getItem("profile");
 				if (profiles) {
 					sessionStorage.removeItem("profile");
