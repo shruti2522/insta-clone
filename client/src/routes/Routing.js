@@ -16,7 +16,7 @@ import Reset from "../screens/ResetPassword.js";
 import NewPass from "../screens/NewPassword.js";
 import Cookies from 'js-cookie';
 
-
+import Explore from "../screens/Explore";
 const Routing = () => {
 
 	const { state, dispatch } = useContext(AuthContext);
@@ -45,7 +45,7 @@ const Routing = () => {
 					<Route exact path='/' element={<Home />} />
 				</Route>
 				<Route exact path='/explore' element={<ProtectedRoute />}>
-					<Route exact path='/explore' element={<Home />} />
+					<Route exact path='/explore' element={<Explore />} />
 				</Route>
 				<Route exact path='/create' element={<ProtectedRoute />}>
 					<Route exact path='/create' element={<CreatePost />} />
