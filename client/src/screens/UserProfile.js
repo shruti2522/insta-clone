@@ -68,7 +68,9 @@ const UserProfilePage = () => {
 	const [value, setValue] = useState("Posts"); // to switch between different tabs
 	const { state, dispatch } = useContext(AuthenticationContext);
 	console.log('user profile state here', state);
-
+var uId=useParams();
+console.log('user id', uId.userid);
+uId=uId.userid;
 	const userId = localStorage.getItem("searchId");
 
 
@@ -78,7 +80,7 @@ const UserProfilePage = () => {
 	const config = axiosConfig();
 
 	useEffect(() => {
-		axios.get( process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${userId}`, config).then((res) => {
+		axios.get( process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${uId}`, config).then((res) => {
 			setData(res.data.data);
 		});
 	}, []);
