@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthenticationContext from "../contexts/auth/Auth.context";
 import { LOGOUT } from "../contexts/types";
 import Axios from "axios";
-
+import LogoutModal from "./Logout";
 // Material-UI Components
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -143,6 +143,7 @@ const getModalStyle = () => {
 };
 
 const Navbar = () => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { state, dispatch } = useContext(AuthenticationContext);
 	const navigate = useNavigate();
 	const [search, setSearch] = useState([]);
@@ -195,7 +196,11 @@ const Navbar = () => {
 		dispatch({ type: LOGOUT });
 		navigate("/login");
 	};
-
+    const onLogout = () => {
+		console.log("logout");
+		handleLogOut();
+	};
+	
 	const storedData = sessionStorage.getItem("data");
 	const parsedData = JSON.parse(storedData);
 	console.log("parsedData", parsedData)
@@ -256,20 +261,20 @@ const Navbar = () => {
 				<p>Add Post</p>
 			</MenuItem>
 			<MenuItem component={Link} to="#">
-                <IconButton>
-                    <Badge
-                        badgeContent={4}
-                        color="secondary"
-                        style={{
-                            "color": "rgba(0, 0, 0, 0.54)",
-                        }}
-                    >
-                        <AllInboxOutlinedIcon />
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-           
+				<IconButton>
+					<Badge
+						badgeContent={4}
+						color="secondary"
+						style={{
+							"color": "rgba(0, 0, 0, 0.54)",
+						}}
+					>
+						<AllInboxOutlinedIcon />
+					</Badge>
+				</IconButton>
+				<p>Messages</p>
+			</MenuItem>
+
 			<MenuItem component={Link} to="#">
 				<IconButton>
 					<Badge badgeContent={6} color="secondary">
@@ -428,23 +433,23 @@ const Navbar = () => {
 									}
 								/>
 								<BottomNavigationAction
-                                    label="Messages"
-                                    value="messages"
-                                    component={Link}
-                                    to="/messages"
-                                    style={{ "color": "rgba(0, 0, 0, 0.54)" }}
-                                    icon={
-                                        <Badge
-                                            badgeContent={4}
-                                            color="secondary"
-                                            style={{
-                                                "color": "rgba(0, 0, 0, 0.54)",
-                                            }}
-                                        >
-                                            <AllInboxOutlinedIcon />
-                                        </Badge>
-                                    }
-                                />
+									label="Messages"
+									value="messages"
+									component={Link}
+									to="/messages"
+									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
+									icon={
+										<Badge
+											badgeContent={4}
+											color="secondary"
+											style={{
+												"color": "rgba(0, 0, 0, 0.54)",
+											}}
+										>
+											<AllInboxOutlinedIcon />
+										</Badge>
+									}
+								/>
 								<BottomNavigationAction
 									label="Notifications"
 									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
@@ -473,11 +478,12 @@ const Navbar = () => {
 										/>
 									}
 								/>
+							
 								<BottomNavigationAction
 									label="Logout"
 									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
 									value="logout"
-									onClick={handleLogOut}
+									onClick={() => setIsModalOpen(true)}
 									icon={
 										<ExitToAppOutlinedIcon
 											style={{
@@ -487,6 +493,8 @@ const Navbar = () => {
 									}
 								/>
 							</BottomNavigation>
+							<LogoutModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLogout={onLogout} />
+
 						</div>
 						<div className={classes.sectionMobile}>
 							<IconButton

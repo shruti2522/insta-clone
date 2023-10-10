@@ -1,0 +1,27 @@
+
+.heartEmoji {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20rem;
+  color: #ff1744;
+  opacity: 0;
+  z-index: 999;
+  animation: pop-up 1s ease-in-out;
+}
+
+
+@keyframes pop-up {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
