@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 	textInfo: { color: "rgba(var(--f52,142,142,142),1)", marginBottom: "10px" },
 }));
 
-export default function VerticalTabs() {
+export default function VerticalTabs({data}) {
 	const classes = useStyles();
 	const [value, setValue] = React.useState(0);
 
@@ -86,13 +86,17 @@ export default function VerticalTabs() {
 				<Tab label="Email From Insta-Clone" {...a11yProps(6)} />
 			</Tabs>
 			<TabPanel value={value} index={0} style={{ width: "100%" }}>
-				<form noValidate autoComplete="off">
+				<form noValidate autoComplete="off" onChange={((e)=>{
+					e.preventDefault();
+					sessionStorage.setItem(e.target.id,e.target.value)
+					console.log('data',e.target.value);
+				})}>
 					<div className={classes.fieldContainer}>
 						<Typography variant="caption" gutterBottom className={classes.fieldLabel}>
 							Name
 						</Typography>
 						<TextField
-							id="outlined-basic"
+							id="editName"
 							variant="outlined"
 							className={classes.fieldInput}
 						/>
@@ -106,7 +110,7 @@ export default function VerticalTabs() {
 							Username
 						</Typography>
 						<TextField
-							id="outlined-basic"
+							id="editUsername"
 							variant="outlined"
 							className={classes.fieldInput}
 						/>

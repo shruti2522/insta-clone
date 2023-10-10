@@ -198,6 +198,7 @@ const Home = () => {
   // Modify your axios configuration to include the toke
 
   useEffect(() => {
+    // sessionStorage.setItem("followers", JSON.stringify([]));
     const fetchData = async () => {
       if (sessionStorage.getItem("posts")) {
         setData(JSON.parse(sessionStorage.getItem("posts")));
@@ -264,7 +265,9 @@ const Home = () => {
       ) : (
         <Grid container spacing={3}>
           {data.map((item) => (
+            
             <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
+            {console.log("itemdata", data)}
               <Card className={classes.root}>
                 <CardHeader
                   className={classes.header}
@@ -273,7 +276,7 @@ const Home = () => {
                       <img
                         className={classes.avatar}
                         alt=""
-                        src={`https://res.cloudinary.com/piyushproj/image/upload/v1696914219/${item.username}.png`}
+                        src={`https://res.cloudinary.com/piyushproj/image/upload/v1696914219/${getUsernameByUserId(item.userId)}.png`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = link;

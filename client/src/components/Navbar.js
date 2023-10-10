@@ -184,6 +184,10 @@ const Navbar = () => {
 		Cookies.remove('authToken');
 		//sessionStorage all clear
 		sessionStorage.clear();
+		// localStorage.clear();
+		localStorage.removeItem("logggedInUser");
+		localStorage.removeItem("searchId");
+		localStorage.removeItem("logggedInName");
 		dispatch({ type: LOGOUT });
 		navigate("/login");
 	};

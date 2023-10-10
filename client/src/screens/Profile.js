@@ -141,6 +141,10 @@ const ProfilePage = () => {
   const [showFollowers, setShowFollowers] = useState(false);
   const [value, setValue] = useState("Posts");
   const [isLoading, setIsLoading] = useState(true);
+  const [change, setChange] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  
 
   const link = "https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg";
 
@@ -171,6 +175,9 @@ const ProfilePage = () => {
         sessionStorage.setItem("followers", JSON.stringify(res.data.data.follower));
         console.log(res.data.data.follower)
         sessionStorage.setItem("profile", JSON.stringify(res.data.data));
+        localStorage.setItem("logggedInUser", (res.data.data.username));
+        localStorage.setItem("logggedInName", (res.data.data.firstname + " " + res.data.data.lastname));
+      
       });
     }
     const userNames = new Map();
@@ -185,7 +192,7 @@ const ProfilePage = () => {
     getFollowers();
 
 
-  }, []);
+  }, [localStorage.getItem("logggedInName"), localStorage.getItem("logggedInUser")]);
 
   //Toggle the EditProfile Button to show the Dialog
   const [openEdit, setOpenEdit] = useState(false);
@@ -196,7 +203,25 @@ const ProfilePage = () => {
   const handleEditClose = () => {
     setOpenEdit(false);
   };
-
+  const handleEditSave = () => {
+    var newName=sessionStorage.getItem("editName");
+    var newUsername=sessionStorage.getItem("editUsername");
+    if(newName==null)
+    {
+      newName=userData.firstname+" "+userData.lastname;
+    }
+    if(newUsername==null)
+    {
+      newUsername=userData.username;
+    }
+    localStorage.setItem("logggedInName", newName);
+    localStorage.setItem("logggedInUser", newUsername);
+    localStorage.setItem("edited", true);
+    setOpenEdit(false);
+    setChange(!change);
+    setNewName(newName);
+    setNewUsername(newUsername);
+  };
   return (
     <>
       <Navbar />
@@ -226,7 +251,8 @@ const ProfilePage = () => {
                   <Box clone mb="20px">
                     <Grid container alignItems="center">
                       <Typography variant="h5">
-                        {userData.username}
+                     {change?newUsername:userData.username}
+                       
                       </Typography>
                       <Button
                         className={classes.editButton}
@@ -302,7 +328,7 @@ const ProfilePage = () => {
                       </Grid>
                     </Grid>
                   </Box>
-                  <Typography variant="h6">{`${userData.firstname} ${userData.lastname}`}</Typography>
+                  <Typography variant="h6"> {change?newName:userData.firstname+" "+userData.lastname}</Typography>
                 </Grid>
               </Grid>
             </Box>
@@ -390,7 +416,7 @@ const ProfilePage = () => {
           <VerticalTabs />
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleEditClose} color="primary">
+          <Button autoFocus onClick={handleEditSave} color="primary">
             Save changes
           </Button>
         </DialogActions>

@@ -85,47 +85,6 @@ const UserProfilePage = () => {
 		});
 	}, []);
 
-	// const followUser = () => {
-	// 	axios.put(`http://localhost:8000/follow`, { followId: userid }, config).then((result) => {
-	// 		dispatch({
-	// 			type: UPDATE_FOLLOW_DATA,
-	// 			payload: { followers: result.data.followers, following: result.data.following },
-	// 		});
-	// 		localStorage.setItem("user", JSON.stringify(result.data));
-	// 		setData((prevState) => {
-	// 			return {
-	// 				...prevState,
-	// 				user: {
-	// 					...prevState.user,
-	// 					followers: [...prevState.user.followers, result.data._id],
-	// 				},
-	// 			};
-	// 		});
-	// 		setShowFollow(false);
-	// 	});
-	// };
-
-	// const unfollowUser = () => {
-	// 	axios.put(`http://localhost:8000/unfollow`, { unfollowId: userid }, config).then((result) => {
-	// 		dispatch({
-	// 			type: UPDATE_FOLLOW_DATA,
-	// 			payload: { followers: result.data.followers, following: result.data.following },
-	// 		});
-	// 		localStorage.setItem("user", JSON.stringify(result.data));
-	// 		setData((prevState) => {
-	// 			const newFollower = prevState.user.followers.filter((item) => item !== result.data._id);
-	// 			return {
-	// 				...prevState,
-	// 				user: {
-	// 					...prevState.user,
-	// 					followers: newFollower,
-	// 				},
-	// 			};
-	// 		});
-	// 		setShowFollow(true);
-	// 	});
-	// };
-
 	console.log("user data", data);
 
 	return (
@@ -211,14 +170,7 @@ const UserProfilePage = () => {
 					</Tabs>
 					<TabPanel value={value} index="Posts">
 						<Grid container spacing={2}>
-							{/* 						 
-									<Grid item xs={4} key={item.id}>
-										<img
-											alt="post"
-											style={{ width: "100%", height: "100%" }}
-											src=
-										/>
-									</Grid> */}
+							
 
 							<Grid item xs={4} className={classes.post_box}>
 								<img
