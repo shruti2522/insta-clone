@@ -34,6 +34,7 @@ import { formatDistanceToNow } from "date-fns";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 
+const link = "https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg";
 
 // General style
 const useStyles = makeStyles((theme) => ({
@@ -145,74 +146,74 @@ const Home = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    
+
 
     const config = axiosConfig();
 
-    const getUser =  async (id) => {
-    try {
-      const response =  await axios.get(
-        process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
-        config
-      );
-      console.log(response.data.data.username)
-       return { userId: id, username: response.data.data.username };
-    } catch (error) {
-      console.error("Error fetching username:", error);
-    }
-  };
+    const getUser = async (id) => {
+        try {
+            const response = await axios.get(
+                process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${id}`,
+                config
+            );
+            console.log(response.data.data.username)
+            return { userId: id, username: response.data.data.username };
+        } catch (error) {
+            console.error("Error fetching username:", error);
+        }
+    };
 
 
     // Modify your axios configuration to include the toke
-  
+
     useEffect(() => {
-    const fetchData = async () => {
-        if(sessionStorage.getItem("posts")){
-            setData(JSON.parse(sessionStorage.getItem("posts")));
-            setIsLoading(false);
-            return;
-        }
-      try {
+        const fetchData = async () => {
+            if (sessionStorage.getItem("posts")) {
+                setData(JSON.parse(sessionStorage.getItem("posts")));
+                setIsLoading(false);
+                return;
+            }
+            try {
 
-        const response = await axios.get(ALL_POST_URL, config);
-        console.log("POST DATA", response.data.data);
-        
-        const fetchedData = response.data.data;
-        sessionStorage.setItem("posts", JSON.stringify(fetchedData));
+                const response = await axios.get(ALL_POST_URL, config);
+                console.log("POST DATA", response.data.data);
+
+                const fetchedData = response.data.data;
+                sessionStorage.setItem("posts", JSON.stringify(fetchedData));
 
 
-        const userNamesMap = new Map();
+                const userNamesMap = new Map();
 
-        
-        for (const item of fetchedData) {
-            const userObj = await getUser(item.userId);
-            userNamesMap.set(item.userId, userObj);
-        }
 
-        const userNames = [...userNamesMap.values()];
+                for (const item of fetchedData) {
+                    const userObj = await getUser(item.userId);
+                    userNamesMap.set(item.userId, userObj);
+                }
 
-        sessionStorage.setItem("data", JSON.stringify(userNames));
-        console.log("session cookie set")
-        setData(fetchedData);
-        setIsLoading(false);
-        
+                const userNames = [...userNamesMap.values()];
 
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    
+                sessionStorage.setItem("data", JSON.stringify(userNames));
+                console.log("session cookie set")
+                setData(fetchedData);
+                setIsLoading(false);
 
-    fetchData();
-  }, []);
-   
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+
+        fetchData();
+    }, []);
+
     const storedData = sessionStorage.getItem("data");
     const parsedData = JSON.parse(storedData);
 
-// Function to retrieve username by userId
+    // Function to retrieve username by userId
     const getUsernameByUserId = (userId) => {
-    const userObject = parsedData.find((user) => user.userId === userId);
-    return userObject ? userObject.username : null;
+        const userObject = parsedData.find((user) => user.userId === userId);
+        return userObject ? userObject.username : null;
     };
 
 
@@ -294,18 +295,18 @@ const Home = () => {
 
     return (
         <>
-        <Navbar />
-            
+            <Navbar />
+
 
             {isLoading ? (
                 <div className={classes.loaderContainer}>
-                 <div className={classes.loader}>
-                     <CircularProgress /> 
+                    <div className={classes.loader}>
+                        <CircularProgress />
 
-                 </div>
+                    </div>
                 </div>
-     // Show loader
-    ) : (data.map((item) => (
+                // Show loader
+            ) : (data.map((item) => (
 
                 <div className="home" key={item._id}>
                     <Card className={classes.root}>
@@ -313,10 +314,14 @@ const Home = () => {
                             className={classes.header}
                             avatar={
                                 <Avatar>
+                                {
+                                    console.log("item", item)   
+                                }
                                     <img
                                         className={classes.avatar}
                                         alt=""
-                                        src={'https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg'}
+									src={`https://res.cloudinary.com/piyushproj/image/upload/v1696914219/${item.username}.png`}
+                                        onError={(e) => { e.target.onerror = null; e.target.src = link }}
                                     />
                                 </Avatar>
                             }
@@ -330,17 +335,17 @@ const Home = () => {
                                     }
                                 >
                                     {getUsernameByUserId(item.userId)} <br /> {item.title}
-                                    
+
                                 </Link>
                             }
                             subheader={formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
-                            
+
                         />
 
                         <CardMedia
                             className={classes.media}
                             image={`https://res.cloudinary.com/piyushproj/image/upload/v1696626899/${item._id}.png`}
-                            onError={(e)=>{
+                            onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.image = 'https://res.cloudinary.com/piyushproj/image/upload/v1696626899/placeholder.png'
                             }}
@@ -353,32 +358,32 @@ const Home = () => {
                         />
 
                         <CardActions className={classes.likeBar} disableSpacing>
-                                <IconButton
-                                    aria-label="Like"
-                                    color="secondary"
-                                    onClick={() => {
-                                        // unlikePost(item._id);
-                                    }}
-                                >
-                                    <FavoriteBorderIcon />
-                                </IconButton>
+                            <IconButton
+                                aria-label="Like"
+                                color="secondary"
+                                onClick={() => {
+                                    // unlikePost(item._id);
+                                }}
+                            >
+                                <FavoriteBorderIcon />
+                            </IconButton>
                             <IconButton aria-label="comments">
                                 <ChatBubbleOutlineIcon />
                             </IconButton>
                             <IconButton
-                                    aria-label="Remove Bookmark"
-                                    style={{ marginLeft: "auto", color: "#e0d011" }}
-                                    // onClick={() => {
-                                    //  removeBookmark(item._id);
-                                    // }}
-                                >
-                                    <BookmarkBorderIcon />
-                                </IconButton>
+                                aria-label="Remove Bookmark"
+                                style={{ marginLeft: "auto", color: "#e0d011" }}
+                            // onClick={() => {
+                            //  removeBookmark(item._id);
+                            // }}
+                            >
+                                <BookmarkBorderIcon />
+                            </IconButton>
                         </CardActions>
 
                         <CardContent>
                             <Typography variant="subtitle2" display="block" gutterBottom>
-                            
+
                             </Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
                                 {item.description}
@@ -488,10 +493,10 @@ const Home = () => {
                         {/* </CardContent> */}
                     </Card>
                 </div>
-            
+
             )))}
 
-        
+
         </>
     );
 };

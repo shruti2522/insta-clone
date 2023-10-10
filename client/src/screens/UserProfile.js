@@ -19,7 +19,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-
+const link = "https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg";
 // General Styles
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 		height: "100%",
 		display: "flex",
 		alignItems: "center",
-		justifyContent: "center", 
+		justifyContent: "center",
 		zIndex: 9999,
 	},
 
@@ -68,9 +68,9 @@ const UserProfilePage = () => {
 	const [value, setValue] = useState("Posts"); // to switch between different tabs
 	const { state, dispatch } = useContext(AuthenticationContext);
 	console.log('user profile state here', state);
-var uId=useParams();
-console.log('user id', uId.userid);
-uId=uId.userid;
+	var uId = useParams();
+	console.log('user id', uId.userid);
+	uId = uId.userid;
 	const userId = localStorage.getItem("searchId");
 
 
@@ -80,7 +80,7 @@ uId=uId.userid;
 	const config = axiosConfig();
 
 	useEffect(() => {
-		axios.get( process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${uId}`, config).then((res) => {
+		axios.get(process.env.REACT_APP_BACKEND_URL + `/users/show-user-profile?userId=${uId}`, config).then((res) => {
 			setData(res.data.data);
 		});
 	}, []);
@@ -139,7 +139,8 @@ uId=uId.userid;
 								<Avatar
 									className={classes.avatar}
 									style={{ margin: "auto" }}
-									src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
+									src={`https://res.cloudinary.com/piyushproj/image/upload/v1696914219/${data.username}.png`}
+									onError={(e) => { e.target.onerror = null; e.target.src = link }}
 								/>
 							</Grid>
 							<Grid item xs={8}>
@@ -148,15 +149,15 @@ uId=uId.userid;
 										<Typography variant="h5">
 											{data ? data.username : "Is Loading ..."}
 										</Typography>
-										
-											<Button
-												className={classes.editButton}
-												variant="outlined"
-												// onClick={() => followUser()}
-											>
-												Follow
-											</Button>
-										
+
+										<Button
+											className={classes.editButton}
+											variant="outlined"
+										// onClick={() => followUser()}
+										>
+											Follow
+										</Button>
+
 
 										<div className={classes.settings}>
 											<IconButton component={Link} to="#">
@@ -166,11 +167,11 @@ uId=uId.userid;
 									</Grid>
 								</Box>
 								<Box mb="20px">
-									 <Grid container spacing={4}>
+									<Grid container spacing={4}>
 										<Grid item>
 											<Typography variant="subtitle1">
 												<b>
-													{ data.totalFollower}
+													{data.totalFollower}
 												</b>{" "}
 												followers
 											</Typography>
@@ -210,7 +211,7 @@ uId=uId.userid;
 					</Tabs>
 					<TabPanel value={value} index="Posts">
 						<Grid container spacing={2}>
-{/* 						 
+							{/* 						 
 									<Grid item xs={4} key={item.id}>
 										<img
 											alt="post"
@@ -222,7 +223,7 @@ uId=uId.userid;
 							<Grid item xs={4} className={classes.post_box}>
 								<img
 									alt="post"
-									style={{ width: "100%" , height: "70%"}}
+									style={{ width: "100%", height: "70%" }}
 									src="https://source.unsplash.com/random"
 								/>
 							</Grid>
@@ -245,10 +246,10 @@ uId=uId.userid;
 				</Box>
 			) : (
 				<div className={classes.loaderContainer}>
-				 <div className={classes.loader}>
-					 <CircularProgress /> 
+					<div className={classes.loader}>
+						<CircularProgress />
 
-				 </div>
+					</div>
 				</div>
 			)}
 		</React.Fragment>

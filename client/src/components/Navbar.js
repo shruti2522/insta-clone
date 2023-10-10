@@ -190,6 +190,8 @@ const Navbar = () => {
 
 	const handleLogOut = () => {
 		Cookies.remove('authToken');
+		//sessionStorage all clear
+		sessionStorage.clear();
 		dispatch({ type: LOGOUT });
 		navigate("/login");
 	};

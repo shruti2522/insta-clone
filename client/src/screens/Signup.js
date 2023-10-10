@@ -133,7 +133,7 @@ const Signup = () => {
     try {
       // Upload the image first
       if (selectedImage) {
-        await addImg(selectedImage, email);
+        await addImg(selectedImage, username);
       }
 
       // Then, proceed with user registration

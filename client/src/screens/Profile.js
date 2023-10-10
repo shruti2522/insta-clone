@@ -150,7 +150,7 @@ const ProfilePage = () => {
     if (followerss) {
       console.log("profile page followerss", followerss)
       setFollowers(JSON.parse(sessionStorage.getItem("followers")));
-     
+
     }
     // console.log(followers, "followers")
     // console.log(JSON.parse(sessionStorage.getItem("followers")),"followerrss")
@@ -173,7 +173,7 @@ const ProfilePage = () => {
         sessionStorage.setItem("profile", JSON.stringify(res.data.data));
       });
     }
-    const userNames=new Map();
+    const userNames = new Map();
     const getFollowers = async () => {
       const followers = await Promise.all(
         profies.follower.map((follower) => getUser(follower.followerId))
@@ -218,7 +218,8 @@ const ProfilePage = () => {
                   <Avatar
                     className={classes.avatar}
                     style={{ margin: "auto" }}
-                    src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
+                    src={`https://res.cloudinary.com/piyushproj/image/upload/v1696914219/${userData.username}.png`}
+                    onError={(e) => { e.target.onerror = null; e.target.src = link }}
                   />
                 </Grid>
                 <Grid item xs={8}>
@@ -258,39 +259,39 @@ const ProfilePage = () => {
 
                       </Grid>
                       {showFollowers && (
-  <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: '9999' }}>
-    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: '#fff', width: '50%', height: '50%', overflow: 'scroll' }}>
-      <div style={{ padding: '10px 20px', borderBottom: '1px solid #dbdbdb' }}>
-     <center>  <h3>Followers</h3></center> 
-        {console.log(followers, "followers")}
-        <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }} onClick={() => setShowFollowers(false)}>
-          <Icon>close</Icon>
-        </button>
-      </div>
+                        <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: '9999' }}>
+                          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: '#fff', width: '50%', height: '50%', overflow: 'scroll' }}>
+                            <div style={{ padding: '10px 20px', borderBottom: '1px solid #dbdbdb' }}>
+                              <center>  <h3>Followers</h3></center>
+                              {console.log(followers, "followers")}
+                              <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }} onClick={() => setShowFollowers(false)}>
+                                <Icon>close</Icon>
+                              </button>
+                            </div>
 
-      {followers.map((item) => (
-  <div key={item.id} style={{ padding: '10px 20px', borderBottom: '1px solid #dbdbdb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Avatar
-        className={classes.avatar}
-        style={{ margin: 'auto', width: '30px', height: '30px' }}
-        src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
-      />
-      <div style={{ marginLeft: '10px' }}>
-        <h1>{item.username}</h1>
-        {/* Add any additional information here */}
-        {/* <p>{item.email}</p> */}
-      </div>
-    </div>
-    <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }}>
-      <Icon>check</Icon>
-    </button>
-  </div>
-))}
+                            {followers.map((item) => (
+                              <div key={item.id} style={{ padding: '10px 20px', borderBottom: '1px solid #dbdbdb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <Avatar
+                                    className={classes.avatar}
+                                    style={{ margin: 'auto', width: '30px', height: '30px' }}
+                                    src="https://i.pinimg.com/564x/80/2a/7a/802a7a792647fc98b1097576762b3785.jpg"
+                                  />
+                                  <div style={{ marginLeft: '10px' }}>
+                                    <h1>{item.username}</h1>
+                                    {/* Add any additional information here */}
+                                    {/* <p>{item.email}</p> */}
+                                  </div>
+                                </div>
+                                <button style={{ border: 'none', background: 'none', padding: '0', font: 'inherit' }}>
+                                  <Icon>check</Icon>
+                                </button>
+                              </div>
+                            ))}
 
-    </div>
-  </div>
-)}
+                          </div>
+                        </div>
+                      )}
 
 
 
