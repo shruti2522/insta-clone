@@ -253,7 +253,7 @@ const Navbar = () => {
 				</IconButton>
 				<p>Add Post</p>
 			</MenuItem>
-			{/*<MenuItem component={Link} to="#">
+			<MenuItem component={Link} to="#">
                 <IconButton>
                     <Badge
                         badgeContent={4}
@@ -267,7 +267,7 @@ const Navbar = () => {
                 </IconButton>
                 <p>Messages</p>
             </MenuItem>
-            */}
+           
 			<MenuItem component={Link} to="#">
 				<IconButton>
 					<Badge badgeContent={6} color="secondary">
@@ -425,7 +425,7 @@ const Navbar = () => {
 										/>
 									}
 								/>
-								{/* <BottomNavigationAction
+								<BottomNavigationAction
                                     label="Messages"
                                     value="messages"
                                     component={Link}
@@ -442,7 +442,7 @@ const Navbar = () => {
                                             <AllInboxOutlinedIcon />
                                         </Badge>
                                     }
-                                /> */}
+                                />
 								<BottomNavigationAction
 									label="Notifications"
 									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
