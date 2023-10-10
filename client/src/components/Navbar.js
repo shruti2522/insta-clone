@@ -158,16 +158,7 @@ const Navbar = () => {
 	const [modalStyle] = useState(getModalStyle);
 	const [openModal, setOpenModal] = useState(false);
 
-	const handleKeyPress = (e) => {
-		if (e.key === "Enter") {
-			// User pressed Enter, construct the profile URL and navigate to it
-			if (searchValue) {
-				searchUser(searchValue);
-				navigate(`/profile/${searchValue}`);
-
-			}
-		}
-	};
+	
 
 
 	const config = axiosConfig();
@@ -211,7 +202,7 @@ const Navbar = () => {
 		const userId = userObject ? userObject.userId : null;
 
 		localStorage.setItem("searchId", userId);
-
+        
 		const userProfileUrl = `${process.env.REACT_APP_BACKEND_URL}/users/show-user-profile?userId=${userId}`;
 
 		const response = await axios.get(userProfileUrl, config);
@@ -220,7 +211,18 @@ const Navbar = () => {
 
 		return response.data.data;
 	};
+	const handleKeyPress = (e) => {
+		if (e.key === "Enter") {
+			// User pressed Enter, construct the profile URL and navigate to it
+			if (searchValue) {
+				searchUser(searchValue);
+			const x=	localStorage.getItem("searchId");
+				
+				navigate(`/profile/${x}`);
 
+			}
+		}
+	};
 	const id = useParams();
 
 	const mobileMenuId = "primary-search-account-menu-mobile";
