@@ -11,9 +11,9 @@ import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: 'column',  // Stack children vertically
-    alignItems: 'center',     // Center content horizontally
-    paddingTop: theme.spacing(4), // Add space at the top
+    flexDirection: 'column',  
+    alignItems: 'center',     
+    paddingTop: theme.spacing(4), 
   },
   chatContainer: {
     width: '100%',
@@ -26,41 +26,39 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: '1.5rem',
     fontWeight: 'bold',
-    marginBottom: theme.spacing(2), // Add space below the heading
+    marginBottom: theme.spacing(2), 
   }
 }));
 
 const ChatList = () => {
   const classes = useStyles();
 
-  // Sample data for chat list
   const chatListData = [
     {
       username: 'user1',
-      avatarUrl: 'https://placekitten.com/64/64', // Replace with actual avatar URL
+      avatarUrl: 'https://placekitten.com/64/64',
       lastMessage: 'Hello there!',
     },
     {
       username: 'user2',
-      avatarUrl: 'https://placekitten.com/64/67', // Replace with actual avatar URL
+      avatarUrl: 'https://placekitten.com/64/67',
       lastMessage: 'How are you doing?',
     },
     {
       username: 'user3',
-      avatarUrl: 'https://placekitten.com/64/66', // Replace with actual avatar URL
+      avatarUrl: 'https://placekitten.com/64/66',
       lastMessage: 'Hii!',
     },
     {
       username: 'user4',
-      avatarUrl: 'https://placekitten.com/64/65', // Replace with actual avatar URL
+      avatarUrl: 'https://placekitten.com/64/65', 
       lastMessage: 'Where are you?',
     },
     {
       username: 'user5',
-      avatarUrl: 'https://placekitten.com/64/68', // Replace with actual avatar URL
+      avatarUrl: 'https://placekitten.com/64/68', 
       lastMessage: 'How you doing?',
     },
-    // Add more chat items here
   ];
 
   return (
@@ -71,7 +69,6 @@ const ChatList = () => {
       <List className={classes.chatContainer}>
         {chatListData.map((chat, index) => (
           <Link to={`/chat/${chat.username}`} key={index}  style={{ textDecoration: 'none' }}>
-            {/* Use Link to wrap each chat item */}
             <ListItem className={classes.listItem} button>
               <ListItemAvatar>
                 <Avatar alt={chat.username} src={chat.avatarUrl} />

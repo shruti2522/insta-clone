@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '1px solid #ddd', 
   },
   avatar: {
-    marginRight: theme.spacing(1), // Add some spacing between avatar and name
+    marginRight: theme.spacing(1), 
   },
   messageList: {
     flex: 1,
@@ -74,10 +74,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: '#0056b3',
     },
-    padding: theme.spacing(1, 3), // Add padding
-    borderRadius: '20px', // Add border radius
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)', // Add a subtle shadow
-    transition: 'background-color 0.3s ease-in-out', // Add a smooth transition
+    padding: theme.spacing(1, 3), 
+    borderRadius: '20px', 
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)', 
+    transition: 'background-color 0.3s ease-in-out', 
   },
 }));
 
@@ -94,24 +94,24 @@ function Chat() {
     if (newMessage.trim() !== '') {
         setMessages([
         ...messages,
-        { text: newMessage, sender: username, id: Date.now() }, // Add the new message to the end of the array
+        { text: newMessage, sender: username, id: Date.now() }, 
         ]);
         setNewMessage('');
     }
     };
-  // Scroll to the bottom of the message list when new messages arrive
+ 
   useEffect(() => {
     if (messageListRef.current) {
-      messageListRef.current.scrollTop = 0; // Scroll to the top, which effectively displays the most recent messages at the bottom
+      messageListRef.current.scrollTop = 0; 
     }
   }, [messages]);
 
  return (
     <Container className={classes.chat}>
       <div className={classes.heading}>
-        <Avatar src={contactAvatarUrl} alt={username} className={classes.avatar} /> {/* Display contact's avatar */}
+        <Avatar src={contactAvatarUrl} alt={username} className={classes.avatar} /> 
         <Typography variant="h6">
-          {username} {/* Display contact's name */}
+          {username}
         </Typography>
       </div>
       <div className={classes.messageList} ref={messageListRef}>
