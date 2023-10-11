@@ -148,6 +148,10 @@ const Navbar = () => {
 	const navigate = useNavigate();
 	const [search, setSearch] = useState([]);
 	const [searchValue, setSearchValue] = useState("");
+	const [isPopupOpen, setPopupOpen] = useState(false);
+   const [go,setGo]=useState(false);
+
+	// Filter users based on the search input
 
 	// Material-Ui
 	const classes = useStyles();
@@ -158,7 +162,7 @@ const Navbar = () => {
 	const [modalStyle] = useState(getModalStyle);
 	const [openModal, setOpenModal] = useState(false);
 
-	
+
 
 
 	const config = axiosConfig();
@@ -191,22 +195,24 @@ const Navbar = () => {
 		dispatch({ type: LOGOUT });
 		navigate("/login");
 	};
-    const onLogout = () => {
+	const onLogout = () => {
 		console.log("logout");
 		handleLogOut();
 	};
-	
+
 	const storedData = sessionStorage.getItem("data");
 	const parsedData = JSON.parse(storedData);
 	console.log("parsedData", parsedData)
-
+	const filteredUsers = parsedData.filter((user) =>
+		user.username.toLowerCase().includes(searchValue.toLowerCase())
+	);
 	const searchUser = async (username) => {
 		const userObject = parsedData.find((user) => user.username === username);
 		console.log("userObject", userObject)
 		const userId = userObject ? userObject.userId : null;
 
 		localStorage.setItem("searchId", userId);
-        
+
 		const userProfileUrl = `${process.env.REACT_APP_BACKEND_URL}/users/show-user-profile?userId=${userId}`;
 
 		const response = await axios.get(userProfileUrl, config);
@@ -220,8 +226,8 @@ const Navbar = () => {
 			// User pressed Enter, construct the profile URL and navigate to it
 			if (searchValue) {
 				searchUser(searchValue);
-			const x=	localStorage.getItem("searchId");
-				
+				const x = localStorage.getItem("searchId");
+
 				navigate(`/profile/${x}`);
 
 			}
@@ -333,10 +339,40 @@ const Navbar = () => {
 					onKeyPress={handleKeyPress}
 
 				/>
+				{/* {go ? <button>Go</button> : null} */}
+
 			</div>
+			{filteredUsers.map((item) => (
+				<div key={item._id}>
+				
+				
+					<Link  href={`/profile/${item._id}`} onClick={(e) => {
+						setSearchValue(item.username);
+					    setGo(true);
+						
+					}}>
+
+						<Divider variant="inset" component="li" style={{ marginLeft: "0px" }} />
+						<ListItem alignItems="flex-start">
+							<ListItemAvatar>
+								<Avatar
+									alt={item.username}
+									src={`https://res.cloudinary.com/piyushproj/image/upload/v1696914219/${item.username}.png`}
+									onError={(e) => {
+										e.target.onerror = null;
+										e.target.src = "https://res.cloudinary.com/piyushproj/image/upload/v1696914219/default.png";
+									}}
+								/>
+							</ListItemAvatar>
+							<ListItemText primary={item.username} />
+						</ListItem>
+
+					</Link>
+				</div>
+			))}
 			<List className={classes.root}>
 				{search.user
-					? search.user.map((item) => {
+					? parsedData.map((item) => {
 						return (
 							<Link
 								className={classes.links}
@@ -366,7 +402,9 @@ const Navbar = () => {
 							</Link>
 						);
 					})
-					: null}
+					: <>
+
+					</>}
 			</List>
 		</div>
 	);
@@ -484,7 +522,7 @@ const Navbar = () => {
 										/>
 									}
 								/>
-							
+
 								<BottomNavigationAction
 									label="Logout"
 									style={{ "color": "rgba(0, 0, 0, 0.54)" }}
