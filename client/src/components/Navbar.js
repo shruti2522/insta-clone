@@ -201,8 +201,11 @@ const Navbar = () => {
 	};
 
 	const storedData = sessionStorage.getItem("data");
-	const parsedData = JSON.parse(storedData);
+	var parsedData = JSON.parse(storedData);
 	console.log("parsedData", parsedData)
+	if(!parsedData){
+		parsedData=[]
+	}
 	const filteredUsers = parsedData.filter((user) =>
 		user.username.toLowerCase().includes(searchValue.toLowerCase())
 	);
