@@ -181,7 +181,7 @@ const ProfilePage = () => {
       });
     }
     const userNames = new Map();
-    var followers
+    var followers=[];
     const getFollowers = async () => {
        followers = await Promise.all(
         profies.follower.map((follower) => getUser(follower.followerId))
