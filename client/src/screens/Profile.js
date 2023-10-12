@@ -6,7 +6,6 @@ import AuthenticationContext from "../contexts/auth/Auth.context";
 import VerticalTabs from "../components/VerticalTabs.js";
 import Navbar from "../components/Navbar";
 import { axiosConfig, MY_POST_URL, MY_BOOKMARKS_URL } from "../config/constants";
-
 // Material-UI Components
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
