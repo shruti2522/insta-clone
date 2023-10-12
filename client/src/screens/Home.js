@@ -198,7 +198,12 @@ const Home = () => {
   // Modify your axios configuration to include the toke
 
   useEffect(() => {
-    // sessionStorage.setItem("followers", JSON.stringify([]));
+    
+   
+    const followers=JSON.parse(sessionStorage.getItem("followers"));
+  if(followers){
+    sessionStorage.setItem("followers", JSON.stringify([]));
+  }
     const fetchData = async () => {
       if (sessionStorage.getItem("posts")) {
         setData(JSON.parse(sessionStorage.getItem("posts")));

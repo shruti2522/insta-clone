@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	inputRoot: {
 		color: "inherit",
+		zIndex: 1,
 	},
 	inputInput: {
 		padding: theme.spacing(1, 1, 1, 0),
@@ -115,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	paper: {
 		position: "absolute",
+		zIndex: 1300,
 		width: 400,
 		backgroundColor: theme.palette.background.paper,
 		border: "1px solid rgba(0, 0, 0, 0.015)",
